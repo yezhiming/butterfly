@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>default binding demo</title>
+	<!--
+	<meta name="lizard-customize" src="../extensions/extend.js">
+	<meta name="lizard-extension" src="../extensions/extend.js">
+	-->
+	<script type="text/javascript" src="../vendor/requirejs/require.js"></script>
+	<script type="text/javascript" src="../js/butterfly-amd.js"></script>
+	<script>
+	require(['butterfly'], function(Butterfly){
+		
+		//定义组件
+		Butterfly.define("login", Backbone.View.extend({
+			events: {
+				"click #click-me": "clickMe"
+			},
+			//butterfly method
+			bind: function(el){
+				console.log("bind!");
+				this.setElement(el);
+			},
+			clickMe: function(){
+				alert('click me');
+			}
+		}));
+
+		Butterfly.bind("", function(view){
+
+		});
+
+		Butterfly.bind("", {
+			bind: function(el){
+
+			},
+			unbind: function(){
+
+			}
+		});
+
+	});
+	</script>
+</head>
+<body>
+	<div id="top1" bt-view="login">
+		<button id="click-me">Click Me</button>
+		<div id="b-1">{{count}}</div>
+		
+		<div id="inner11" bt-view="a">
+		</div>
+		<div>
+			<div>{{count + 1}} </div>
+		</div>
+		<!--
+		<div id="form" lz-view="lizard/view">
+			<div id="b-2">{{count}}</div>
+			<button id="click-me-2">Count++</button>
+		</div>
+		-->
+	</div>
+	
+	<div id="top2" bt-view="lizard/view">
+		
+	</div>
+
+	<div>
+		<div id="inner1" bt-view="detailView">
+		</div>
+	</div>
+</body>
+</html>

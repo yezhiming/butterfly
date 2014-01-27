@@ -1,0 +1,34 @@
+{
+  "name": "butterfly",
+  "version": "0.0.1",
+  "authors": [
+    "Justin Yip <justin.yip@foxmail.com>"
+  ],
+  "description": "Lizard Mobile Web Framework",
+  "main": "dist/js/butterfly.js",
+  "keywords": [
+    "HTML5",
+    "Mobile",
+    "Web"
+  ],
+  "license": "MIT",
+  "homepage": "http://yezhiming.github.io/butterfly",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "requirejs": ">= 2.0.0",
+    "requirejs-text": "*",
+    "requirejs-i18n": "*",
+    "requirejs-domready": "*",
+    "zepto": "*",
+    "fastclick": "*",
+    "iscroll": "*",
+    "underscore": "*",
+    "backbone": "*"
+  }
+}
