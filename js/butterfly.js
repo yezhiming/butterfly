@@ -21,12 +21,35 @@
     // document ready when it hasn't yet created the body element
     if (/complete|loaded|interactive/.test(document.readyState) && document.body) callback()
     else document.addEventListener('DOMContentLoaded', function(){ callback() }, false)
-    return this
+    return this;
+  }
+
+  Date.prototype.format = function(format) //author: meizz
+	{
+	  var o = {
+	    "M+" : this.getMonth()+1, //month
+	    "d+" : this.getDate(),    //day
+	    "h+" : this.getHours(),   //hour
+	    "m+" : this.getMinutes(), //minute
+	    "s+" : this.getSeconds(), //second
+	    "q+" : Math.floor((this.getMonth()+3)/3),  //quarter
+	    "S" : this.getMilliseconds() //millisecond
+	  }
+
+	  if(/(y+)/.test(format)) format=format.replace(RegExp.$1, (this.getFullYear()+"").substr(4 - RegExp.$1.length));
+	  for(var k in o)if(new RegExp("("+ k +")").test(format))
+	    format = format.replace(RegExp.$1, RegExp.$1.length==1 ? o[k] : ("00"+ o[k]).substr((""+ o[k]).length));
+	  return format;
+	}
+
+  Butterfly.log = function(){
+  	arguments[0] = new Date().format('h:mm:ss:S') + '[Butterfly] ' + arguments[0];
+  	console.log.apply(console, arguments);
   }
 
 	//define a plugin
 	Butterfly.define = function(name, component){
-		console.log('[Butterfly] define component: ' + name);
+		Butterfly.log('define component: %s', name);
 		this.components[name] = component;
 
 		//TODO: apply unbind bindings
@@ -52,9 +75,9 @@
 		//load components
 		//scan dom
 		fly: function(){
-			console.log('[butterfly] build view structure...');
+			Butterfly.log('build view structure...');
 			this.scan(this.el);
-			console.log('[butterfly] apply bindings...');
+			Butterfly.log('apply bindings...');
 			this.applyBindings();
 		},
 
@@ -79,7 +102,7 @@
 		applyBindings: function(){
 			var me = this;
 			_.each(Butterfly.components, function(component_factory, name){
-				console.log('[butterfly] bind component:' + name);
+				Butterfly.log('bind component:' + name);
 				_.each(me.topViews, function(binding){
 					if (binding.componentName === name)
 						me.bindComponent(binding, name, component_factory);
@@ -119,7 +142,7 @@
 	};
 
 	var ViewBinding = Butterfly.ViewBinding = function(el, parent){
-		console.log('create binding: ' + el.getAttribute('id'));
+		Butterfly.log('create binding: ' + el.getAttribute('id'));
 
 		this.el = el;
 		this.componentName = el.getAttribute(Butterfly.PREFIX + '-view');
@@ -169,7 +192,7 @@
 		},
 
 		_createBinding: function(node, variables){
-			console.log('create text binding');
+			Butterfly.log('create text binding');
 			var binding = {node: node, template: _.template(node.textContent)};
 			this.bindings.push(binding);
 		}
