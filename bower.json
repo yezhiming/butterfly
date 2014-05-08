@@ -29,6 +29,26 @@
     "fastclick": "*",
     "iscroll": "*",
     "underscore": "*",
-    "backbone": "*"
+    "backbone": "*",
+    "ratchet": "*"
+  },
+  "exportsOverride": {
+    "requirejs-domready": {
+      "": "domReady.js"
+    },
+    "requirejs-i18n": {
+      "": "i18n.js"
+    },
+    "requirejs-text": {
+      "": "text.js"
+    },
+    "ratchet": {
+      "css": "dist/css/*",
+      "fonts": "dist/fonts/*",
+      "js": "dist/js/*"
+    },
+    "iscroll": {
+      "": "build/*"
+    }
   }
 }
