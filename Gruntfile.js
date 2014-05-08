@@ -1,7 +1,34 @@
 module.exports = function(grunt) {
 
+	/**
+	 * 1.清理
+	 * 2.用bower安装依赖
+	 * 3.生成stylus样式
+	 */
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json'),
+
+		//claen the dist before copy & compile files
+		clean: {
+			dist: ["dist/"],
+			examples: ["examples/butterfly"]
+		},
+
+		//just run 'grunt bower:install' and you'll see files from your Bower packages in lib directory
+		bower: {
+			install: {
+				options: {
+					production: true,
+					targetDir: 'vendor',
+					layout: 'byComponent',
+					install: true,
+					verbose: true,
+					cleanTargetDir: true,
+					cleanBowerDir: true
+				}
+			}
+		},
+
 		//compile stylus to css
 		stylus: {
 			compile: {
@@ -13,90 +40,35 @@ module.exports = function(grunt) {
 				}
 			}
 		},
-		//just run 'grunt bower:install' and you'll see files from your Bower packages in lib directory
-		bower: {
-			install: {
-				options: {
-					targetDir: 'vendor',
-					layout: 'byComponent',
-					install: true,
-					verbose: true,
-					cleanTargetDir: true,
-					cleanBowerDir: true
-				}
-			}
-		},
+		
 		//copy the src/images and vendor to dist
 		copy: {
-			src: {
-				files: [{
-					expand: true,
-					cwd: 'src/',
-					src: ['js/**', 'images/**'],
-					dest: 'dist/'
-				}]
+			source: {
+				files: [
+					//复制butterfly的js源码到dist/js
+					{expand: true, cwd: 'js/', src: ['**'], dest: 'dist/js'}
+				]
+			},
+			vendor: {
+				files: [
+					//复制require.js
+					{expand: true, cwd: 'vendor/requirejs', src: ['require.js'], dest: 'dist/js'},
+					//复制ratchet的js文件到dist/js
+					{expand: true, cwd: 'vendor/ratchet/js', src: ['ratchet.js'], dest: 'dist/js'},
+					//复制ratchet的图标文件到dist/fonts
+					{expand: true, cwd: 'vendor/ratchet/fonts', src: ['**'], dest: 'dist/fonts'},
+					//复制整个vendor目录
+					{expand: true, cwd: 'vendor/', src: ['**'], dest: 'dist/vendor'}
+				]
 			},
 			examples: {
-				files: [{
-					expand: true,
-					cwd: 'dist/',
-					src: ['**'],
-					dest: 'examples/piece/'
-				}]
-			}
-		},
-		rename: {
-			pieceInExamples: {
-				src: 'examples/dist/',
-				dest: 'examples/piece'
-			}
-		},
-
-		//claen the dist before copy & compile files
-		clean: {
-			dist: ["dist/"],
-			examples: ["examples/piece"],
-			cache: [".sass-cache/", "temp/"]
-		},
-		requirejs: {
-			lizard: {
-				options: {
-					baseUrl: ".",
-					mainConfigFile: "r.config.js",
-					name: "dist/js/lizard.js",
-					out: "dist/js/lizard.js",
-					wrap: false,
-					locale: "zh-cn"
-				}
-			}
-		},
-		concat: {
-			options: {
-				separator: ';',
-			},
-			pieceDebug: {
-				src: ['src/js/vendor/requirejs/js/require.js', 'dist/js/piece-debug.js'],
-				dest: 'dist/js/piece-debug.js',
-			},
-			piece: {
-				src: ['src/js/vendor/requirejs/js/require.js', 'dist/js/piece.js'],
-				dest: 'dist/js/piece.js',
-			}
-		},
-		uglify: {
-			options: {
-				mangle: true,
-				beautify: false
-			},
-			piece: {
-				files: {
-					'dist/js/piece.js': ['dist/js/piece.js']
-				}
+				files: [{expand: true, cwd: 'dist/', src: ['**'], dest: 'examples/butterfly/'}]
 			}
 		}
 	});
 
 	grunt.loadNpmTasks('grunt-bower-task');
+	grunt.loadNpmTasks('grunt-contrib-symlink');
 	grunt.loadNpmTasks('grunt-contrib-stylus');
 	grunt.loadNpmTasks('grunt-contrib-requirejs');
 	grunt.loadNpmTasks('grunt-contrib-copy');
@@ -105,18 +77,11 @@ module.exports = function(grunt) {
 	grunt.loadNpmTasks('grunt-contrib-uglify');
 	grunt.loadNpmTasks('grunt-contrib-jshint');
 
-	grunt.registerTask('build:debug', [
+	grunt.registerTask('build', [
 		'clean:dist',
-		'copy:src',
-		'concat:pieceDebug'
-	]);
-
-	grunt.registerTask('build:release', [
-		'copy:sass',
-		'requirejs:lizard',
-		'concat:piece',
-		'uglify:piece',
-		'clean:cache'
+		'stylus:compile',
+		'copy:vendor',
+		'copy:source'
 	]);
 
 	grunt.registerTask('examples', [
@@ -125,8 +90,7 @@ module.exports = function(grunt) {
 	]);
 
 	grunt.registerTask('default', [
-		'debug',
-		'release',
+		'build',
 		'examples'
 	]);
 };
