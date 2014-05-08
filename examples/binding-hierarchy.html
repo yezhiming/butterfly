@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>default binding demo</title>
+	<script type="text/javascript" src="../vendor/zepto/zepto.js"></script>
+	<script type="text/javascript" src="../vendor/underscore/underscore.js"></script>
+	<script type="text/javascript" src="../js/butterfly.js"></script>
+</head>
+<body data-app="demo1">
+	<div id="top1" bt-view="login">
+		<button id="click-me">Click Me</button>
+		<div id="b-1">{{count}}</div>
+		
+		<div id="inner11" bt-view="a">
+		</div>
+		<div>
+			<div>{{count + 1}} </div>
+		</div>
+		<!--
+		<div id="form" lz-view="lizard/view">
+			<div id="b-2">{{count}}</div>
+			<button id="click-me-2">Count++</button>
+		</div>
+		-->
+	</div>
+	
+	<div id="top2" bt-view="login2">
+		<button id="click-me2">Click Me2</button>
+	</div>
+
+	<div>
+		<div id="inner1" bt-view="detailView">
+		</div>
+	</div>
+
+	<script>
+	Butterfly.define("login2", function(view){
+		view.events = {
+			"click #click-me2": 'onClickMe'
+		}
+
+		view.onClickMe = function(){
+			alert('on click me');
+		}
+		
+	});
+	</script>
+
+</body>
+</html>

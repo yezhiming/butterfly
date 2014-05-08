@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title></title>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="initial-scale=1, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0"/>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta http-equiv="Access-Control-Allow-Origin" content="*"/>
+
+  <meta http-equiv="X-Frame-Options" content="ALLOW-FROM">
+  <meta http-equiv="pragma" content="no-cache" />
+
+  <link href="../butterfly/css/butterfly.css" rel="stylesheet"/>
+  <script type="text/javascript" src="../butterfly/js/require.js" data-main="../butterfly/js/butterfly-amd"></script>
+  <script type="text/javascript" src="../butterfly/js/ratchet.js"></script>
+  <script type="text/javascript">
+    //为所有requirejs的请求加上时间戳，防止缓存
+    // var require = {
+    //     urlArgs: "bust=" + (new Date()).getTime()
+    // };
+  </script>
+  <style>
+  #container-sample {
+    background: green;
+  }
+  </style>
+</head>
+<body>
+
+  <div class="hbox" data-view="main/index">
+    <div id="menu" class="flex1">
+      <header class="bar bar-nav">
+        <h1 class="title">Title</h1>
+      </header>
+      <ul class="table-view">
+        <li class="table-view-cell"><a href="#info/a" data-ignore="push">个人信息</a></li>
+        <li class="table-view-cell"><a href="#reception/b">客户接待</a></li>
+        <li class="table-view-cell"><a href="#review">客户回访</a></li>
+        <li class="table-view-cell"><a href="#">试乘试驾</a></li>
+        <li class="table-view-cell"><a href="#">报价成交</a></li>
+        <li class="table-view-cell"><a href="#">自我培训</a></li>
+        <li class="table-view-cell"><a href="#">积分奖励</a></li>
+        <li class="table-view-cell"><a href="#">小工具</a></li>
+        <li class="table-view-cell"><a href="#">报表管理</a></li>
+      </ul>
+    </div>
+
+    <div id="container-sample" class="flex1" data-view="main/mycontainer">
+      <div id="mail-list" data-page="mail/index.html"></div>
+      <div id="mail-detail" data-view="main/index"></div>
+    </div>
+
+    <div id="navigation-sample" data-view="main/navigation"></div>
+  </div>
+
+
+<!--   <div id="v1" data-view="main/index">
+    <div>
+      <div data-view="main/item"></div>
+      <div>
+        <div data-view="main/item"></div>
+      </div>
+    </div>
+    <div></div>
+  </div> -->
+
+</body>
+</html>
