@@ -2,10 +2,34 @@
 <html>
 <head>
 	<title>Butterfly.js</title>
-	<script type="text/javascript" src="../vendor/zepto/zepto.js"></script>
-	<script type="text/javascript" src="../js/butterfly.js"></script>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<link href="butterfly/css/butterfly.css" rel="stylesheet"/>
+	<script type="text/javascript" src="../vendor/requirejs/require.js" data-main="../js/butterfly-amd"></script>
+  <script type="text/javascript">
+  	//为所有requirejs的请求加上时间戳，防止缓存
+    // var require = {
+    //     urlArgs: "bust=" +  (new Date()).getTime()
+    // };
+  </script>
 </head>
 <body>
+
+	<header class="bar bar-nav">
+	  <button class="btn btn-link btn-nav pull-left back">
+	    <span class="icon icon-left-nav"></span>
+	  </button>
+	  <h1 class="title">收件箱</h1>
+	</header>
+
+	<div id="left" data-view="stackview">
+		<div data-view="view1">
+			<ul>
+				<li>menu.1</li>
+				<li>menu.2</li>
+				<li>menu.3</li>
+			</ul>
+		</div>
+	</div>
 
 </body>
 </html>
