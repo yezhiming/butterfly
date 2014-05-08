@@ -1,4 +1,4 @@
-define(['require', './view'], function(require, View){
+define(['require'], function(require){
 	
 	if (typeof String.prototype.endsWith !== 'function') {
     String.prototype.endsWith = function(suffix) {

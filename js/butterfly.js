@@ -11,8 +11,9 @@
 
 })(this, function(root, Butterfly, _, $, Backbone){
 
-	Butterfly.VERSION = '1.0';
-	Butterfly.history = Backbone.history;
+	_.templateSettings = {
+	  interpolate: /\{\{(.+?)\}\}/g
+	};
 
 	Date.prototype.format = function(format) //author: meizz
 	{
@@ -32,12 +33,25 @@
 	  return format;
 	}
 
+	//Butterfly start
+	Butterfly.VERSION = '1.0';
+
   Butterfly.log = function(){
   	arguments[0] = new Date().format('h:mm:ss:S') + '[Butterfly] ' + arguments[0];
   	console.log.apply(console, arguments);
   }
+	
+	Butterfly.history = Backbone.history;
 
-  Butterfly.Router = Backbone.Router.extend({
+	Butterfly.navigate = function(fragment, options){
+		options = options || {trigger: true};
+		Backbone.history.navigate(fragment, options);
+	}
+
+  // Butterfly.Router
+  // ---------------
+  //
+  var Router = Butterfly.Router = Backbone.Router.extend({
 		routes: {
 			'*path(?*param)': 'match',
 			//eg: index.html
@@ -58,7 +72,9 @@
 		}
 	});
 
-	//the Butterfly
+  // Butterfly.Application
+  // ---------------
+  //
 	var Application = Butterfly.Application = function(el){
 
 		this.el = el;
@@ -72,8 +88,7 @@
 
 			this.scan(document.body);
 
-			var router = new Butterfly.Router();
-			Butterfly.router = router;
+			Butterfly.router = new Butterfly.Router();
 
 			var rootPath = window.location.pathname.substr(0, window.location.pathname.lastIndexOf('/'));
 			Butterfly.log("start history with root: %s", rootPath);
@@ -85,24 +100,15 @@
 
 		scan: function(el){
 			if (el.getAttribute('data-view')) {
-				
+
 			} else {
 				for (var i = 0, node; node = el.childNodes[i]; i++) {
-					if (node.nodeType === 1) this._scan(node, this);
+					if (node.nodeType === 1) this.scan(node, this);
 	    	}
 			}
-		}
+		}//scan
 
 	});
-
-	_.templateSettings = {
-	  interpolate: /\{\{(.+?)\}\}/g
-	};
-
-	Butterfly.navigate = function(fragment, options){
-		options = options || {trigger: true};
-		Backbone.history.navigate(fragment, options);
-	}
 
 	Butterfly.ready = function(callback){
     if (/complete|loaded|interactive/.test(document.readyState) && document.body) callback()
