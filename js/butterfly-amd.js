@@ -1,9 +1,9 @@
-var vendorPath = 'vendor';
+var vendorPath = 'butterfly/vendor';
 require.config({
 	baseUrl: '../',
 	packages: [{
 		name: 'butterfly',
-		location: 'js',
+		location: 'butterfly/js',
 		main: 'butterfly'
 	}],
 	paths: {
@@ -13,17 +13,19 @@ require.config({
 		i18n: vendorPath +'/requirejs-i18n/i18n',
 		// lib
 		zepto: vendorPath + '/zepto/zepto',
+		jquery: vendorPath + '/zepto/zepto',
 		underscore: vendorPath + '/underscore/underscore',
 		backbone: vendorPath + '/backbone/backbone',
 		fastclick: vendorPath + '/fastclick/lib/fastclick',
-		iScroll: vendorPath + '/iscroll/build/iscroll-lite',
+		iscroll: vendorPath + '/iscroll/iscroll-probe',
 	},
-	waitSeconds: 30,
+	waitSeconds: 5,
 	shim: {
 		zepto: {exports: '$'},
+		jquery: {exports: '$'},
 		underscore: {exports: '_'},
 		backbone: {
-			deps: ['underscore', 'zepto'],
+			deps: ['underscore', 'jquery'],
 			exports: 'Backbone'
 		},
 		'butterfly/butterfly': {
@@ -31,7 +33,21 @@ require.config({
 			exports: 'Butterfly'
 		},
 
-		iScroll: {exports: 'iScroll'},
+		iscroll: {exports: 'IScroll'},
 		fastclick: {exports: 'FastClick'}
 	}
+});
+
+require(['butterfly', 'iscroll', 'butterfly/viewloader'], function(Butterfly, IScroll, ViewLoader){
+	console.log('Butterfly.js run');
+	function err(err){
+		console.log(err);
+	}
+	
+	// ViewLoader.loadView('mail/index.html', function(view){
+	// }, err);
+
+	ViewLoader.loadView(document.querySelector('#container-sample'), function(view){
+		
+	}, err);
 });
