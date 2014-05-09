@@ -1,7 +1,7 @@
 (function(root, factory) {
 
 	if (typeof define === 'function' && define.amd) {
-		define(['underscore', 'jquery', 'backbone', 'exports'], function(_, $, Backbone, exports){
+		define(['exports', 'underscore', 'jquery', 'backbone'], function(exports, _, $, Backbone){
 			root.Butterfly = factory(root, exports, _, $, Backbone);
 		});
 
@@ -11,9 +11,14 @@
 
 })(this, function(root, Butterfly, _, $, Backbone){
 
+	//underscore template style {{xxx}}
 	_.templateSettings = {
 	  interpolate: /\{\{(.+?)\}\}/g
 	};
+
+	String.prototype.endsWith = function(suffix) {
+    return this.indexOf(suffix, this.length - suffix.length) !== -1;
+  };
 
 	Date.prototype.format = function(format) //author: meizz
 	{
@@ -40,6 +45,70 @@
   	arguments[0] = new Date().format('h:mm:ss:S') + '[Butterfly] ' + arguments[0];
   	console.log.apply(console, arguments);
   }
+
+  // Butterfly.ViewLoader
+  // ---------------
+  //
+	var ViewLoader = Butterfly.ViewLoader = {
+
+		//使用require.js加载View类
+		loadViewClass: function(ViewClassName, success, fail){
+			// var viewLoaded = require.defined(ViewClassName);
+			require(ViewClassName, function(){
+				success.call(arguments);
+			}, fail);
+		},
+
+		//加载元素
+		loadViewByEL : function(el, success, fail){
+			//el的绑定类，若没有，默认为最普通的View（框架定义的）
+			var elementBinding = el.getAttribute('data-view') || './view';
+			//加载el的绑定类
+			require([elementBinding], function(TopViewClass){
+				var topView = new TopViewClass({el: el});
+
+				//el子节点的绑定类集合
+				var el_view_bindings = el.querySelectorAll('[data-view]');
+
+				var view_names = _.map(el_view_bindings, function(node){ return node.getAttribute('data-view'); });
+
+				if (view_names.length == 0) {
+					success(topView);
+
+				} else {
+					require(view_names, function(){
+						_.each(arguments, function(ViewClass, index){
+							var view = new ViewClass({el: el_view_bindings[index]});
+							topView.addSubview(view);
+						});
+						success(topView);
+					}, fail);
+				}
+
+			}, fail);
+
+		},
+
+		//TODO: 加多一个参数targetEl?
+		loadView : function(view, success, fail){
+			var me = this;
+			console.log('loadView: %s', view);
+			if (typeof view == 'string') {
+				require(['text!'+view], function(page){
+
+					var el = document.createElement('div');
+					el.innerHTML = (/<html/i.test(page)) ? page.match(/<body[^>]*>([\s\S.]*)<\/body>/i)[0] : page;
+
+					me.loadViewByEL(el, success, fail);
+
+				}, fail);
+
+			} else {
+				me.loadViewByEL(view ,success, fail);
+			}
+		}//loadView
+
+	};
 	
 	Butterfly.history = Backbone.history;
 
@@ -78,15 +147,13 @@
 	var Application = Butterfly.Application = function(el){
 
 		this.el = el;
-		this.topViews = [];
+		this.subviews = [];
 	};
 
 	_.extend(Application.prototype, {
 	
 		//launch application
 		fly: function(){
-
-			this.scan(document.body);
 
 			Butterfly.router = new Butterfly.Router();
 
@@ -96,14 +163,21 @@
 	      pushState: false,
 	      root: rootPath
 	    });
+
+	    this.scan(document.body);
 		},
 
 		scan: function(el){
+			var me = this;
 			if (el.getAttribute('data-view')) {
-
+				ViewLoader.loadView(el, function(view){
+					me.subviews.push(view);
+				}, function(err){
+					console.error("loadView:[%s] fail: %s", el, err);
+				});
 			} else {
 				for (var i = 0, node; node = el.childNodes[i]; i++) {
-					if (node.nodeType === 1) this.scan(node, this);
+					if (node.nodeType === 1) this.scan(node);
 	    	}
 			}
 		}//scan

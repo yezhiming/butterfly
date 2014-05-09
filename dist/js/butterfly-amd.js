@@ -38,16 +38,15 @@ require.config({
 	}
 });
 
-require(['butterfly', 'iscroll', 'butterfly/viewloader'], function(Butterfly, IScroll, ViewLoader){
-	console.log('Butterfly.js run');
+require(['butterfly', 'iscroll'], function(Butterfly, IScroll){
 	function err(err){
-		console.log(err);
+		console.error(err);
 	}
 	
-	// ViewLoader.loadView('mail/index.html', function(view){
+	// Butterfly.ViewLoader.loadView('mail/index.html', function(view){
 	// }, err);
 
-	ViewLoader.loadView(document.querySelector('#container-sample'), function(view){
+	// Butterfly.ViewLoader.loadView(document.querySelector('#container-sample'), function(view){
 		
-	}, err);
+	// }, err);
 });
