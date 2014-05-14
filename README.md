@@ -68,6 +68,7 @@ butterfly.js的核心组件
 * Butterfly
 * Butterfly.Application
 * Butterfly.View
+* Butterfly.ViewLoader
 * Butterfly.History
 * Butterfly.Router
 
@@ -75,6 +76,22 @@ butterfly.js的核心组件
 
 ### Butterfly.View
 对Backbone.View进行增强，将view对象绑定到el上（remove时解除），添加subviews熟悉
+
+### Butterfly.ViewLoader
+
+Load Page
+```js
+Butterfly.ViewLoader.loadView('mail/index.html', function(view){
+	//using view object
+}, err);
+```
+
+Load By DOM
+```js
+Butterfly.ViewLoader.loadView(document.querySelector('#container-sample'), function(view){
+	//using view object
+}, err);
+```
 
 ### Butterfly.History
 对Backbone.History进行增强，增加unroute函数，能够解除路由

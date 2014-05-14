@@ -33,15 +33,12 @@ require.config({
 	}
 });
 
-require(['butterfly', 'iscroll'], function(Butterfly, IScroll){
-	function err(err){
-		console.error(err);
-	}
-	
-	// Butterfly.ViewLoader.loadView('mail/index.html', function(view){
-	// }, err);
+require(['butterfly', 'iscroll', "fastclick"], 
+	function(Butterfly, IScroll, FastClick){
 
-	// Butterfly.ViewLoader.loadView(document.querySelector('#container-sample'), function(view){
-		
-	// }, err);
+		//iOS scroll to top
+		setTimeout(function() {window.scrollTo(0, 1);}, 0);
+
+		//enable fastclick
+		FastClick.attach(document.body);
 });

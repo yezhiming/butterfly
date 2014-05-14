@@ -111,13 +111,6 @@
 		}//loadView
 
 	};
-	
-	Butterfly.history = Backbone.history;
-
-	Butterfly.navigate = function(fragment, options){
-		options = options || {trigger: true};
-		Backbone.history.navigate(fragment, options);
-	}
 
   // Butterfly.Router
   // ---------------
@@ -143,6 +136,9 @@
 		}
 	});
 
+  // Butterfly.Router
+  // ---------------
+  //
 	_.extend(Backbone.History.prototype, {
 		unroute: function(route) {
 			this.handlers = _.reject(this.handlers, function(entry){
@@ -162,11 +158,17 @@
       }
   	},
   	unroute: function(route){
-  		Butterfly.log('unroute: %s', route);
   		if (!_.isRegExp(route)) route = this._routeToRegExp(route);
   		Backbone.history.unroute(route);
   	}
   });
+
+  Butterfly.history = Backbone.history;
+
+	Butterfly.navigate = function(fragment, options){
+		options = options || {trigger: true};
+		Backbone.history.navigate(fragment, options);
+	}
 
   // Butterfly.Application
   // ---------------

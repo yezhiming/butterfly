@@ -1,44 +1,54 @@
-define(['./view', 'underscore'], function(View, _){
+define(['butterfly', 'butterfly/view', 'backbone'], function(Butterfly, View, Backbone){
+
+	/**
+	 * TODO:
+	 * 1. 容器内增加loading，在页面切换时显示
+	 */
 	return View.extend({
 
-		stack: [],
+		initialize: function(options){
+			View.prototype.initialize.call(this, options);
 
-		initialize: function(){
+			this.el.classList.add('container');
+			var routes = this.el.getAttribute('data-routes');
+
+			this.initRouter();
+		},
+
+		initRouter: function(){
 			
+			//todo: register router
+			Butterfly.router.on('route', function(path, params){
+				console.log('route event: %s | %s', path, params);
+				
+			});
+
+			var MR = Backbone.Router.extend({
+				routes: {
+					"ccc": "route1"
+				},
+				route1: function(){
+					console.log('route1');
+				}
+			});
+
+			var mr = new MR();
+			mr.remove();
 		},
 
-		push: function(view){
-			//当前最顶
-			var firstView = _.last(this.stack);
+		setContentView: function(view){
+			var me = this;
 
-			this.stack.push(view);
-			//移除
-			if (firstView) firstView.hide();
-			if (firstView) firstView.remove();
-
-			//添加到本container
-			view.render(); this.el.appendChild(view.el);
-
-			view.show();
-		},
-
-		pop: function(){
-			if (this.stack.length <= 0) return;
-
-			var firstView = this.stack.pop();
-			var secondView = _.last(this.stack);
-
-			topView.willDisappear();
-			secondView.willAppear();
-			
-			topView.remove();
-
-			topView.didDisappear();
-			secondView.didAppear();
-		},
-
-		addSubview: function(view){
-			this.push(view);
+			Butterfly.ViewLoader.loadView(view, function(viewObject){
+				if (me.contentView) {
+					me.contentView.hide();
+					me.contentView.remove();
+				};
+				me.contentView = viewObject;
+				me.el.appendChild(viewObject.el);
+				viewObject.show();
+			});
 		}
+
 	});
 });
