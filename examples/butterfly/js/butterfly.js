@@ -73,7 +73,7 @@
 				var view_names = _.map(el_view_bindings, function(node){ return node.getAttribute('data-view'); });
 
 				if (view_names.length == 0) {
-					success(topView);
+					if (success) success(topView);
 
 				} else {
 					require(view_names, function(){
@@ -81,7 +81,7 @@
 							var view = new ViewClass({el: el_view_bindings[index]});
 							topView.addSubview(view);
 						});
-						success(topView);
+						if (success) success(topView);
 					}, fail);
 				}
 

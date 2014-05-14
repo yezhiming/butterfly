@@ -4,7 +4,7 @@ define(['butterfly/view'], function(View){
 
 		initialize: function(){
 			View.prototype.initialize.call(this, arguments);
-			console.log('main.index init~~~~~');
+			console.log('mail.index init~~~~~');
 		},
 
 		render: function(){
