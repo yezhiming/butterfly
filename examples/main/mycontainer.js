@@ -1,5 +1,9 @@
-define(['butterfly/view', 'backbone'], function(View, Backbone){
+define(['butterfly', 'butterfly/view', 'backbone'], function(Butterfly, View, Backbone){
 
+	/**
+	 * TODO:
+	 * 1. 容器内增加loading，在页面切换时显示
+	 */
 	return View.extend({
 
 		initialize: function(options){
@@ -14,11 +18,9 @@ define(['butterfly/view', 'backbone'], function(View, Backbone){
 				
 			});
 
-			// Backbone.history.stop();
-
 			var mr = Backbone.Router.extend({
 				routes: {
-					"container/1": "route1"
+					"ccc": "route1"
 				},
 				route1: function(){
 					console.log('route1');
@@ -26,28 +28,21 @@ define(['butterfly/view', 'backbone'], function(View, Backbone){
 			});
 
 			new mr();
+		},
 
-			// Backbone.history.start();
+		setContentView: function(view){
+			var me = this;
+
+			Butterfly.ViewLoader.loadView(view, function(viewObject){
+				if (me.contentView) {
+					me.contentView.hide();
+					me.contentView.remove();
+				};
+				me.contentView = viewObject;
+				me.el.appendChild(viewObject.el);
+				viewObject.show();
+			});
 		}
 
-		// addSubview: function(view){
-		// 	console.log('add [%s] to [%s]', view.el.id, this.el.id);
-
-		// 	//当前最顶
-		// 	var firstView = _.last(this.subviews);
-
-		// 	this.subviews.push(view);
-
-		// 	//移除
-		// 	if (firstView) {
-		// 		firstView.hide();
-		// 		// firstView.remove();
-		// 	}
-
-		// 	// //添加到本container
-		// 	view.render(); this.el.appendChild(view.el);
-
-		// 	view.show();
-		// }
 	});
 });
