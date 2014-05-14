@@ -143,6 +143,31 @@
 		}
 	});
 
+	_.extend(Backbone.History.prototype, {
+		unroute: function(route) {
+			this.handlers = _.reject(this.handlers, function(entry){
+				return entry.route.toString() == route.toString();
+			});
+		}
+	});
+
+  // extend removal method
+	_.extend(Backbone.Router.prototype, {
+  	remove: function(){
+  		if (!this.routes) return;
+      this.routes = _.result(this, 'routes');
+      var route, routes = _.keys(this.routes);
+      while ((route = routes.pop()) != null) {
+        this.unroute(route);
+      }
+  	},
+  	unroute: function(route){
+  		Butterfly.log('unroute: %s', route);
+  		if (!_.isRegExp(route)) route = this._routeToRegExp(route);
+  		Backbone.history.unroute(route);
+  	}
+  });
+
   // Butterfly.Application
   // ---------------
   //

@@ -5,7 +5,7 @@ Butterfly.js是一个简单易用的移动Web框架。
 Butterfly.js的特性
 * 页面绑定
 * 支持AMD & Require.js
-* 
+*
 
 ## 快速开始
 
@@ -68,4 +68,16 @@ butterfly.js的核心组件
 * Butterfly
 * Butterfly.Application
 * Butterfly.View
-* Butterfly.ViewBinding
+* Butterfly.History
+* Butterfly.Router
+
+### Butterfly.Application
+
+### Butterfly.View
+对Backbone.View进行增强，将view对象绑定到el上（remove时解除），添加subviews熟悉
+
+### Butterfly.History
+对Backbone.History进行增强，增加unroute函数，能够解除路由
+
+### Butterfly.Router
+对Backbone.Router进行增强，借助Butterfly.History，能够通过调用remove方法，解除自身定义的路由规则绑定

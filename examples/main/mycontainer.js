@@ -18,7 +18,7 @@ define(['butterfly', 'butterfly/view', 'backbone'], function(Butterfly, View, Ba
 				
 			});
 
-			var mr = Backbone.Router.extend({
+			var MR = Backbone.Router.extend({
 				routes: {
 					"ccc": "route1"
 				},
@@ -27,7 +27,8 @@ define(['butterfly', 'butterfly/view', 'backbone'], function(Butterfly, View, Ba
 				}
 			});
 
-			new mr();
+			var mr = new MR();
+			mr.remove();
 		},
 
 		setContentView: function(view){
