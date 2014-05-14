@@ -133,6 +133,9 @@ Butterfly.ViewLoader.loadView('mail/index.html', function(view){
 
 ### ListView
 
+## Optimization
+TODO: 加载速度优化
+
 
 ## Tips & Traps
 
@@ -150,3 +153,7 @@ View.extend({
 ```
 上面的代码，我们重写View类的initialize方法，但我们只做功能增强，所以需要确保父类的方法也得到调用。
 js没有super，所以我们要基于prototype进行父类调用。
+
+## TODO
+* Router与container绑定
+* 构建、Optimization
