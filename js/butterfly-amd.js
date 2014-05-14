@@ -16,7 +16,7 @@ require.config({
 		jquery: vendorPath + '/zepto/zepto',
 		underscore: vendorPath + '/underscore/underscore',
 		backbone: vendorPath + '/backbone/backbone',
-		fastclick: vendorPath + '/fastclick/lib/fastclick',
+		fastclick: vendorPath + '/fastclick/fastclick',
 		iscroll: vendorPath + '/iscroll/iscroll-probe',
 	},
 	waitSeconds: 5,
