@@ -8,7 +8,7 @@ module.exports = function(grunt) {
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json'),
 
-		//claen the dist before copy & compile files
+		//clean the dist before copy & compile files
 		clean: {
 			dist: ["dist/"],
 			examples: ["examples/butterfly"]
