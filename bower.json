@@ -15,7 +15,8 @@
     "bower_components",
     "vendor",
     "test",
-    "tests"
+    "tests",
+    "examples"
   ],
   "dependencies": {
     "requirejs": "*",

@@ -75,20 +75,48 @@ butterfly.js的核心组件
 ### Butterfly.Application
 
 ### Butterfly.View
-对Backbone.View进行增强，将view对象绑定到el上（remove时解除），添加subviews熟悉
+对Backbone.View进行增强，将view对象绑定到el上（remove时解除），添加subviews属性
 
 ### Butterfly.ViewLoader
-ViewLoader用于
-Load Page
+ViewLoader用于构建页面绑定，能够通过在DOM元素的data-view属性，构建绑定结构，支持两种加载模式：
+1. 按DOM节点加载
+2. 按html页面加载
+
+页面绑定示例：
+```html
+<div data-view="butterfly/container">
+	<div data-view="member/login">
+	...
+	</div>
+	<div data-view="member/register">
+	...
+	</div>
+</div>
+```
+
+#### 按DOM节点加载
+给定一个el对象，加载逻辑如下：
+1. 检查el的绑定类型，若没有，绑定类型设为butterfly/view
+2. 构建el及其所有子节点的绑定
+3. 所有el的子节点的绑定View对象，挂到el的View对象的subviews下（扁平化结构，无层级关系）
+4. 返回el的绑定View对象
+
 ```js
-Butterfly.ViewLoader.loadView('mail/index.html', function(view){
+Butterfly.ViewLoader.loadView(document.querySelector('#sample'), function(view){
 	//using view object
 }, err);
 ```
 
-Load By DOM
+#### 按页面加载
+加载逻辑如下：
+1. 通过require.js的text插件进行页面加载（ajax）
+2. 新建一个div元素作为容器
+3. 将改页面body内的所有元素，放到该div内
+4. 构建改页面的所有页面绑定
+
+示例用法：
 ```js
-Butterfly.ViewLoader.loadView(document.querySelector('#container-sample'), function(view){
+Butterfly.ViewLoader.loadView('mail/index.html', function(view){
 	//using view object
 }, err);
 ```
