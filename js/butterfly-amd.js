@@ -28,11 +28,6 @@ require.config({
 			deps: ['underscore', 'jquery'],
 			exports: 'Backbone'
 		},
-		'butterfly/butterfly': {
-			deps: ['backbone'],
-			exports: 'Butterfly'
-		},
-
 		iscroll: {exports: 'IScroll'},
 		fastclick: {exports: 'FastClick'}
 	}

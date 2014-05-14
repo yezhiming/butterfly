@@ -62,7 +62,7 @@
 		//加载元素
 		loadViewByEL : function(el, success, fail){
 			//el的绑定类，若没有，默认为最普通的View（框架定义的）
-			var elementBinding = el.getAttribute('data-view') || './view';
+			var elementBinding = el.getAttribute('data-view') || 'butterfly/view';
 			//加载el的绑定类
 			require([elementBinding], function(TopViewClass){
 				var topView = new TopViewClass({el: el});
@@ -90,13 +90,15 @@
 		},
 
 		//TODO: 加多一个参数targetEl?
+		//view can be either a html node or a string
 		loadView : function(view, success, fail){
 			var me = this;
-			console.log('loadView: %s', view);
+			Butterfly.log('loadView: %s', view);
 			if (typeof view == 'string') {
 				require(['text!'+view], function(page){
 
 					var el = document.createElement('div');
+					el.classList.add('butterfly-page');
 					el.innerHTML = (/<html/i.test(page)) ? page.match(/<body[^>]*>([\s\S.]*)<\/body>/i)[0] : page;
 
 					me.loadViewByEL(el, success, fail);
@@ -159,10 +161,7 @@
 
 			var rootPath = window.location.pathname.substr(0, window.location.pathname.lastIndexOf('/'));
 			Butterfly.log("start history with root: %s", rootPath);
-			Backbone.history.start({
-	      pushState: false,
-	      root: rootPath
-	    });
+			Backbone.history.start({pushState: false, root: rootPath});
 
 	    this.scan(document.body);
 		},
@@ -174,6 +173,7 @@
 					me.subviews.push(view);
 				}, function(err){
 					console.error("loadView:[%s] fail: %s", el, err);
+					throw err;
 				});
 			} else {
 				for (var i = 0, node; node = el.childNodes[i]; i++) {
