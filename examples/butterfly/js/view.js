@@ -2,12 +2,12 @@ define(['backbone'], function(Backbone){
 	
 	return Backbone.View.extend({
 
-		initialize: function(){
+		initialize: function(options){
 			this.subviews = [];
+			this.el.view = this;
 		},
 
 		addSubview: function(view){
-			// console.log('add [%s] to [%s]', view.el.id, this.el.id);
 			this.subviews.push(view);
 		},
 
@@ -16,7 +16,8 @@ define(['backbone'], function(Backbone){
 		},
 		
 		remove: function(){
-			console.log('remove: ' + this.el.id);
+			delete this.el.view;
+			Backbone.View.prototype.remove.call(this);
 			_.each(this.subviews, function(subview){
 				subview.remove();
 			});
