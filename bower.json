@@ -23,11 +23,13 @@
     "requirejs-text": "*",
     "requirejs-i18n": "*",
     "requirejs-domready": "*",
-    "zepto": "*",
     "fastclick": "*",
     "iscroll": "*",
+    "jquery": "*",
     "underscore": "*",
-    "backbone": "*",
+    "backbone": "*"
+  },
+  "devDependencies": {
     "ratchet": "*",
     "bootstrap": "*"
   },

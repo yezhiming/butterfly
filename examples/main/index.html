@@ -31,7 +31,34 @@
 </head>
 <body>
 
-  <div class="hbox" data-view="main/index">
+  <div id="main-container" class="hbox" data-view="main/index">
+
+    <div id="menu" style="width: 150px">
+      <ul class="table-view">
+        <li class="table-view-cell"><a href="#info/a" data-ignore="push">个人信息</a></li>
+        <li class="table-view-cell"><a href="#reception/b">客户接待</a></li>
+        <li class="table-view-cell"><a href="#review">客户回访</a></li>
+        <li class="table-view-cell"><a href="#">试乘试驾</a></li>
+        <li class="table-view-cell"><a href="#">报价成交</a></li>
+        <li class="table-view-cell"><a href="#">自我培训</a></li>
+        <li class="table-view-cell"><a href="#">积分奖励</a></li>
+        <li class="table-view-cell"><a href="#">小工具</a></li>
+        <li class="table-view-cell"><a href="#">报表管理</a></li>
+      </ul>
+    </div>
+
+    <div id="container-sample" class="flex1" data-view="butterfly/container"></div>
+
+  </div>
+
+
+  <!-- <div id="container-sample" class="flex1" data-view="main/mycontainer">
+    <div id="mail-list" data-page="mail/index.html"></div>
+    <div id="mail-detail" data-view="main/index"></div>
+  </div> -->
+
+</body>
+</html>
 
 <!-- Nav Begin -->
 <nav class="navbar navbar-default" role="navigation">
@@ -88,30 +115,3 @@
   </div><!-- /.container-fluid -->
 </nav>
 <!-- Nav End -->
-
-    <div id="menu" style="width: 150px">
-      <ul class="table-view">
-        <li class="table-view-cell"><a href="#info/a" data-ignore="push">个人信息</a></li>
-        <li class="table-view-cell"><a href="#reception/b">客户接待</a></li>
-        <li class="table-view-cell"><a href="#review">客户回访</a></li>
-        <li class="table-view-cell"><a href="#">试乘试驾</a></li>
-        <li class="table-view-cell"><a href="#">报价成交</a></li>
-        <li class="table-view-cell"><a href="#">自我培训</a></li>
-        <li class="table-view-cell"><a href="#">积分奖励</a></li>
-        <li class="table-view-cell"><a href="#">小工具</a></li>
-        <li class="table-view-cell"><a href="#">报表管理</a></li>
-      </ul>
-    </div>
-
-    <div id="container-sample" class="flex1" data-view="butterfly/container"></div>
-
-  </div>
-
-
-  <!-- <div id="container-sample" class="flex1" data-view="main/mycontainer">
-    <div id="mail-list" data-page="mail/index.html"></div>
-    <div id="mail-detail" data-view="main/index"></div>
-  </div> -->
-
-</body>
-</html>

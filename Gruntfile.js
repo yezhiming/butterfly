@@ -18,13 +18,11 @@ module.exports = function(grunt) {
 		bower: {
 			install: {
 				options: {
-					production: true,
+					production: false,
 					targetDir: 'vendor',
 					layout: 'byComponent',
-					install: true,
-					verbose: true,
-					cleanTargetDir: true,
-					cleanBowerDir: true
+					cleanup: true,
+					verbose: true
 				}
 			}
 		},
