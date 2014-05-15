@@ -1,4 +1,4 @@
-define(['underscore', 'zepto'], function(_, $){
+define(['underscore', 'jquery'], function(_, $){
 
 	var dsOptions = ['identifier', 'url', 'requestParams', 'pageParam', 'pageSizeParam', 'startParam', 'countParam'];
 	
