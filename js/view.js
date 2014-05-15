@@ -24,7 +24,9 @@ define(['backbone'], function(Backbone){
 		},
 
 		show: function(){},
-		hide: function(){}
+		hide: function(){},
+		saveState: function(){},
+		loadState: function(){}
 
 	});
 });
