@@ -18,7 +18,7 @@
   <script type="text/javascript" src="../butterfly/js/require.js" data-main="../butterfly/js/butterfly-amd"></script>
   <script type="text/javascript" src="../butterfly/js/ratchet.js"></script>
   <script type="text/javascript">
-    //为所有requirejs的请求加上时间戳，防止缓存
+    //prevent cache
     // var require = {
     //     urlArgs: "bust=" + (new Date()).getTime()
     // };
@@ -31,7 +31,16 @@
 </head>
 <body>
 
-  <div id="main-container" class="hbox" data-view="main/index">
+  <div id="main" data-view="$container">
+    <div id="hall" data-view="$container" data-path="/hall">
+      
+    </div>
+    <div id="sales" data-view="$container" data-path="/sales">
+      
+    </div>
+  </div>
+
+  <div id="main-container" class="hbox">
 
     <div id="menu" style="width: 150px">
       <ul class="table-view">
@@ -47,15 +56,9 @@
       </ul>
     </div>
 
-    <div id="container-sample" class="flex1" data-view="butterfly/container"></div>
+    <div class="flex1">content</div>
 
   </div>
-
-
-  <!-- <div id="container-sample" class="flex1" data-view="main/mycontainer">
-    <div id="mail-list" data-page="mail/index.html"></div>
-    <div id="mail-detail" data-view="main/index"></div>
-  </div> -->
 
 </body>
 </html>

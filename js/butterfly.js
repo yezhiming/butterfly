@@ -62,7 +62,7 @@
 		//加载元素
 		loadViewByEL : function(el, success, fail){
 			//el的绑定类，若没有，默认为最普通的View（框架定义的）
-			var elementBinding = el.getAttribute('data-view') || 'butterfly/view';
+			var elementBinding = (el.getAttribute('data-view') || '$view').replace('$', 'butterfly/');
 			//加载el的绑定类
 			require([elementBinding], function(TopViewClass){
 				var topView = new TopViewClass({el: el});
@@ -70,7 +70,9 @@
 				//el子节点的绑定类集合
 				var el_view_bindings = el.querySelectorAll('[data-view]');
 
-				var view_names = _.map(el_view_bindings, function(node){ return node.getAttribute('data-view'); });
+				var view_names = _.map(el_view_bindings, function(node){ 
+					return node.getAttribute('data-view').replace('$', 'butterfly/');
+				});
 
 				if (view_names.length == 0) {
 					if (success) success(topView);
@@ -87,7 +89,7 @@
 
 			}, fail);
 
-		},
+		},//loadViewByEL
 
 		//TODO: 加多一个参数targetEl?
 		//view can be either a html node or a string
