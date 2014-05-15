@@ -12,8 +12,7 @@ require.config({
 		domReady: vendorPath + '/requirejs-domready/domready',
 		i18n: vendorPath +'/requirejs-i18n/i18n',
 		// lib
-		zepto: vendorPath + '/zepto/zepto',
-		jquery: vendorPath + '/zepto/zepto',
+		jquery: vendorPath + '/jquery/jquery',
 		underscore: vendorPath + '/underscore/underscore',
 		backbone: vendorPath + '/backbone/backbone',
 		fastclick: vendorPath + '/fastclick/fastclick',
@@ -21,7 +20,6 @@ require.config({
 	},
 	waitSeconds: 5,
 	shim: {
-		zepto: {exports: '$'},
 		jquery: {exports: '$'},
 		underscore: {exports: '_'},
 		backbone: {
@@ -33,7 +31,7 @@ require.config({
 	}
 });
 
-require(['butterfly', 'iscroll', "fastclick"], 
+require(['butterfly', 'iscroll', "fastclick"],
 	function(Butterfly, IScroll, FastClick){
 
 		//iOS scroll to top

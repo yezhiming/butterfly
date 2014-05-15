@@ -12,7 +12,7 @@ require.config({
 		domReady: vendorPath + '/requirejs-domready/domready',
 		i18n: vendorPath +'/requirejs-i18n/i18n',
 		// lib
-		jquery: vendorPath + '/zepto/zepto',
+		jquery: vendorPath + '/jquery/jquery',
 		underscore: vendorPath + '/underscore/underscore',
 		backbone: vendorPath + '/backbone/backbone',
 		fastclick: vendorPath + '/fastclick/fastclick',
