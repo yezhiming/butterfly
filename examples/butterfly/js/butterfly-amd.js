@@ -7,6 +7,7 @@ require.config({
 		main: 'butterfly'
 	}],
 	paths: {
+		router: 'butterfly/router',
 		// require.js plugins
 		text: vendorPath + '/requirejs-text/text',
 		domReady: vendorPath + '/requirejs-domready/domready',

@@ -119,22 +119,10 @@
   //
   var Router = Butterfly.Router = Backbone.Router.extend({
 		routes: {
-			'*path(?*param)': 'match',
-			//eg: index.html
-			'': 'index',
-			//eg: index.html#com.foss.demo/listView
-			//eg: index.html#com.foss.demo/listView?t=push
-			"*module/*page(?*param)": "modularRoute"
+			'*path(?*params)': 'any',
 		},
-		match: function(path, param) {
-			Butterfly.log('route any: %s | %s', path, param);
-		},
-		index: function() {
-			this.modularRoute(this.defaultModule, this.defaultView);
-		},
-		modularRoute: function(module, view, param) {
-			Butterfly.log('route: module[%s] / view[%s] / params[%s]', module, view, param);
-			
+		any: function(path, params){
+			Butterfly.log('route any: %s', arguments);
 		}
 	});
 
@@ -193,6 +181,9 @@
 			Backbone.history.start({pushState: false, root: rootPath});
 
 	    this.scan(document.body);
+
+	    //TODO: 直接使用body作为data-window，Router关联到这里
+	    //window.route('xxx');
 		},
 
 		scan: function(el){
@@ -223,6 +214,8 @@
 		var app = new Butterfly.Application(document.body);
 		//only one now
 		Butterfly.application = app;
+
+		root.butterfly = app;
 		app.fly();
 	});
 
