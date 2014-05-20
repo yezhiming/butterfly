@@ -10,11 +10,8 @@
   "license": "MIT",
   "homepage": "http://yezhiming.github.io/butterfly",
   "ignore": [
-    "**/.*",
     "node_modules",
     "bower_components",
-    "vendor",
-    "test",
     "tests",
     "examples"
   ],
