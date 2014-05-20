@@ -13,9 +13,12 @@
     "node_modules",
     "bower_components",
     "tests",
-    "examples"
+    "examples",
+    "stylus"
   ],
   "dependencies": {
+  },
+  "devDependencies": {
     "requirejs": "*",
     "requirejs-text": "*",
     "requirejs-i18n": "*",
@@ -25,10 +28,6 @@
     "jquery": "*",
     "underscore": "*",
     "backbone": "*"
-  },
-  "devDependencies": {
-    "ratchet": "*",
-    "bootstrap": "*"
   },
   "exportsOverride": {
     "requirejs-domready": {
