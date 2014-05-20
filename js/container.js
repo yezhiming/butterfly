@@ -12,6 +12,7 @@ define(['butterfly', 'butterfly/view', 'backbone'], function(Butterfly, View, Ba
 			// this.el.classList.add('container');
 		},
 
+		/*单个*/
 		setContentView: function(view){
 			var me = this;
 
@@ -26,6 +27,7 @@ define(['butterfly', 'butterfly/view', 'backbone'], function(Butterfly, View, Ba
 			});
 		},
 
+		/*多个之间切换*/
 		setActiveView: function(selector){
 			this.$(">div").removeClass('active');
 			var el = this.el.querySelector(selector);
