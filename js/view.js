@@ -5,10 +5,6 @@ define(['backbone'], function(Backbone){
 		initialize: function(options){
 			this.subviews = [];
 			this.el.view = this;
-
-			if (this.el.hasAttribute('data-key-window')) {
-				
-			};
 		},
 
 		addSubview: function(view){
