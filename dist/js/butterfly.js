@@ -42,7 +42,7 @@
 	Butterfly.VERSION = '1.0';
 
   Butterfly.log = function(){
-  	arguments[0] = new Date().format('h:mm:ss:S') + '[Butterfly] ' + arguments[0];
+  	arguments[0] = new Date().format('h:mm:ss:S') + '[><] ' + arguments[0];
   	console.log.apply(console, arguments);
   }
 
@@ -62,7 +62,7 @@
 		//加载元素
 		loadViewByEL : function(el, success, fail){
 			//el的绑定类，若没有，默认为最普通的View（框架定义的）
-			var elementBinding = (el.getAttribute('data-view') || '$view').replace('$', 'butterfly/');
+			var elementBinding = (el.getAttribute('data-window') || el.getAttribute('data-view') || '$view').replace('$', 'butterfly/');
 			//加载el的绑定类
 			require([elementBinding], function(TopViewClass){
 				var topView = new TopViewClass({el: el});
@@ -114,19 +114,7 @@
 
 	};
 
-  // Butterfly.Router
-  // ---------------
-  //
-  var Router = Butterfly.Router = Backbone.Router.extend({
-		routes: {
-			'*path(?*params)': 'any',
-		},
-		any: function(path, params){
-			Butterfly.log('route any: %s', arguments);
-		}
-	});
-
-  // Butterfly.Router
+  // Butterfly.History
   // ---------------
   //
 	_.extend(Backbone.History.prototype, {
@@ -153,6 +141,19 @@
   	}
   });
 
+  // Butterfly.Router
+  // ---------------
+  //
+  var Router = Butterfly.Router = Backbone.Router.extend({
+		routes: {
+			'*path(?*params)': 'any',
+		},
+		any: function(path, params){
+			Butterfly.log('route any: %s', arguments);
+			root.butterfly.route(path, params);
+		}
+	});
+
   Butterfly.history = Backbone.history;
 
 	Butterfly.navigate = function(fragment, options){
@@ -164,33 +165,51 @@
   // ---------------
   //
 	var Application = Butterfly.Application = function(el){
-
 		this.el = el;
-		this.subviews = [];
 	};
 
 	_.extend(Application.prototype, {
+
+		route: function(path, params){
+			if (this.window.route) this.window.route(path, params);
+		},
 	
 		//launch application
 		fly: function(){
+	    // this.scan(document.body);
 
-			Butterfly.router = new Butterfly.Router();
+	    this.scanWindowOnly(function(){
+	    	Butterfly.router = new Butterfly.Router();
 
-			var rootPath = window.location.pathname.substr(0, window.location.pathname.lastIndexOf('/'));
-			Butterfly.log("start history with root: %s", rootPath);
-			Backbone.history.start({pushState: false, root: rootPath});
-
-	    this.scan(document.body);
-
-	    //TODO: 直接使用body作为data-window，Router关联到这里
-	    //window.route('xxx');
+	    	var pathname = window.location.pathname;
+				var rootPath = pathname.substr(0, pathname.lastIndexOf('/'));
+				Butterfly.log("start history with root: %s", rootPath);
+				Backbone.history.start({pushState: false, root: rootPath});
+	    });
 		},
 
+		scanWindowOnly: function(success){
+			var me = this;
+
+			var mainWindow = document.querySelector('[data-window]');
+			if (mainWindow) {
+				ViewLoader.loadView(mainWindow, function(view){
+					me.window = view;
+					success();
+				}, function(err){
+					console.error("loadView:[%s] fail: %s", el, err);
+					throw err;
+				});				
+			}
+		},
+
+		/*搜索所有顶层view绑定*/
 		scan: function(el){
 			var me = this;
 			if (el.getAttribute('data-view')) {
 				ViewLoader.loadView(el, function(view){
 					me.subviews.push(view);
+					if (el.hasAttribute('data-key-window')) {me.keyWindow = view;};
 				}, function(err){
 					console.error("loadView:[%s] fail: %s", el, err);
 					throw err;

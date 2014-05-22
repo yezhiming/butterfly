@@ -1,6 +1,6 @@
 define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 
-	var options = ['itemTemplate'];
+	var options = ['itemTemplate', 'itemview'];
 
 	/**
 	 * list view component
@@ -61,6 +61,24 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			});
 
 		},//initialize
+
+		//删除一个或多个item
+		deleteItems: function(array){
+			var ul = this.el.querySelector('ul');
+			_.each(ul.querySelectorAll('li'), function(li){
+				var index = li.getAttribute('data-index');
+				if (_.contains(array, index)) ul.removeChild(li);
+			});
+			this.refresh();
+		},
+		//删除所有item
+		deleteAllItems: function(refresh){
+			var ul = this.el.querySelector('ul');
+			while (ul.lastChild) {
+				ul.removeChild(ul.lastChild);
+			}
+			if (refresh) this.refresh();
+		},
 
 		/*** public method ***/
 

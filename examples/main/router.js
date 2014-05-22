@@ -2,6 +2,8 @@ define(['butterfly'], function(Butterfly){
 
 	return Butterfly.Router.extend({
 		routes: {
+			"sales/*path": 'sales',
+			"customers/*path": 'customers'
 		},
 
 		hall: function(page){

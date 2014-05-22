@@ -12,6 +12,7 @@ define(['butterfly', 'butterfly/view', 'backbone'], function(Butterfly, View, Ba
 			// this.el.classList.add('container');
 		},
 
+		/*单个*/
 		setContentView: function(view){
 			var me = this;
 
@@ -26,10 +27,22 @@ define(['butterfly', 'butterfly/view', 'backbone'], function(Butterfly, View, Ba
 			});
 		},
 
-		setActiveView: function(selector){
-			this.$(">div").removeClass('active');
-			var el = this.el.querySelector(selector);
-			el.classList.add('active');
+		//目前是取path的第一节作为id，找到相应的子节点，隐藏其他，显示出来
+		route: function(paths, params){
+			
+			if (!paths) return;
+
+			var array = paths.split('/');
+			var subview = this.routes[array.shift()];
+
+			if (subview) {
+				this.subviews.forEach(function(subview){
+					subview.el.classList.remove('active');
+				});
+				subview.el.classList.add('active');
+
+				if (array.length > 0) subview.route(array.join('/'));
+			}
 		}
 
 	});

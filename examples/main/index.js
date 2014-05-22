@@ -1,13 +1,13 @@
-define(['butterfly/container'], function(View){
+define(['butterfly/container'], function(Container){
 
-	return View.extend({
+	return Container.extend({
 
 		events: {
 			'click #switch': 'switchContent'
 		},
 
 		initialize: function(){
-			View.prototype.initialize.call(this, arguments);
+			Container.prototype.initialize.call(this, arguments);
 			console.log('main.index init~~~~~');
 		},
 

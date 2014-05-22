@@ -4,11 +4,14 @@ define(['backbone'], function(Backbone){
 
 		initialize: function(options){
 			this.subviews = [];
+			this.routes = {};
 			this.el.view = this;
 		},
 
 		addSubview: function(view){
 			this.subviews.push(view);
+			var path = view.el.getAttribute('data-route') || view.el.id;
+			if (path) this.routes[path] = view;
 		},
 
 		setElement: function(element, delegate){
@@ -26,8 +29,6 @@ define(['backbone'], function(Backbone){
 		render: function(){
 			Backbone.View.prototype.render.call(this, arguments);
 		},
-
-		navigate: function(){},
 
 		show: function(){},
 		hide: function(){},
