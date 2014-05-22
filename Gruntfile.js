@@ -63,6 +63,7 @@ module.exports = function(grunt) {
 				files: [{expand: true, cwd: 'dist/', src: ['**'], dest: 'examples/butterfly/'}]
 			}
 		}
+		
 	});
 
 	grunt.loadNpmTasks('grunt-bower-task');
