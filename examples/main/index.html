@@ -16,6 +16,13 @@
 
   <script type="text/javascript" src="../butterfly/vendor/jquery/jquery.js"></script>
   <script type="text/javascript" src="../butterfly/vendor/bootstrap/bootstrap.js"></script>
+  <script>
+  var require = {
+    paths: {
+      'router': 'main/router'
+    }
+  }
+  </script>
   <script type="text/javascript" src="../butterfly/js/require.js" data-main="../butterfly/js/butterfly-amd"></script>
   <style>
   #main {
@@ -46,7 +53,7 @@
 <body>
 
   <!-- key window -->
-  <div id="main" data-window="main/index">
+  <div id="main" data-window="$container">
     <div id="hall" data-view="$tabbar">
       <!-- tabbar -->
       <ul>
@@ -54,20 +61,15 @@
         <li>hall2</li>
         <li>hall3</li>
       </ul>
-      <!-- content -->
-      <div data-role="tab-content">
-        <div data data-page=""></div>
-      </div>
+      <div data-role="tab-content"></div>
     </div>
     <div id="sales" class="active" data-view="$tabbar">
       <ul>
-        <li><a>sales1</a></li>
-        <li>sales2</li>
-        <li>sales3</li>
+        <li><a href="#sales/dashboard" data-path="dashboard" data-route="sales/dashboard.html">dashboard</a></li>
+        <li><a href="#sales/schedule" data-path="schedule" data-route="sales/schedule.html">schedule</a></li>
+        <li><a href="#sales/memo" data-path="memo" data-route="sales/memo">memo</a></li>
       </ul>
-      <div>
-        <!-- content -->
-      </div>
+      <div data-role="tab-content"></div>
     </div>
   </div>
 

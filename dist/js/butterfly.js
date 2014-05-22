@@ -96,15 +96,18 @@
 		loadView : function(view, success, fail){
 			var me = this;
 			Butterfly.log('loadView: %s', view);
-			if (typeof view == 'string') {
+			if (typeof view == 'string' && view.endsWith('html')) {
 				require(['text!'+view], function(page){
 
 					var el = document.createElement('div');
-					el.classList.add('butterfly-page');
 					el.innerHTML = (/<html/i.test(page)) ? page.match(/<body[^>]*>([\s\S.]*)<\/body>/i)[0] : page;
 
-					me.loadViewByEL(el, success, fail);
+					me.loadViewByEL(el.firstChild, success, fail);
+				}, fail);
 
+			} else if (typeof view == 'string') {
+				require([view], function(View){
+					success(new View());
 				}, fail);
 
 			} else {
@@ -149,7 +152,7 @@
 			'*path(?*params)': 'any',
 		},
 		any: function(path, params){
-			Butterfly.log('route any: %s', arguments);
+			Butterfly.log('route: %s ? ', path, params);
 			root.butterfly.route(path, params);
 		}
 	});
@@ -231,9 +234,6 @@
 
 	Butterfly.ready(function(){
 		var app = new Butterfly.Application(document.body);
-		//only one now
-		Butterfly.application = app;
-
 		root.butterfly = app;
 		app.fly();
 	});
