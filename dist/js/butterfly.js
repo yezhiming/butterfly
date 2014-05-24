@@ -102,7 +102,7 @@
 					var el = document.createElement('div');
 					el.innerHTML = (/<html/i.test(page)) ? page.match(/<body[^>]*>([\s\S.]*)<\/body>/i)[0] : page;
 
-					me.loadViewByEL(el.firstChild, success, fail);
+					me.loadViewByEL(el.firstElementChild, success, fail);
 				}, fail);
 
 			} else if (typeof view == 'string') {

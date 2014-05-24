@@ -195,3 +195,4 @@ var require = {
 ## TODO
 * Router与container绑定
 * 构建、Optimization
+* requirejs butterfly.view插件
