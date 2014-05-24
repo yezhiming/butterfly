@@ -14,18 +14,25 @@ define(['require', 'underscore', './container', 'butterfly'],
 		route: function(paths, params){
 			var me = this;
 			
-			var target = this.routes[paths];
+			var array = paths.split('/');
+			var target = this.routes[array.shift()];
 
 			if (!target) return;
 
 			Butterfly.ViewLoader.loadView(target, function(viewObject){
 				//replace contentView
-				if (me.contentView) me.contentView.remove();
+				if (me.contentView) {
+					me.contentView.hide();
+					me.contentView.remove();
+				}
+				
 				me.contentView = viewObject;
-				//render new contentView
-				var content = me.el.querySelector("[data-role='tab-content']");
+
 				viewObject.render();
-				content.appendChild(viewObject.el);
+				me.el.querySelector("[data-role='tab-content']").appendChild(viewObject.el);
+				viewObject.show();
+
+				if (array.length > 0) viewObject.route(array.join('/'), params);
 			});
 		}
 		
