@@ -14,7 +14,7 @@ define(['butterfly', 'butterfly/view', 'backbone'], function(Butterfly, View, Ba
 
 			var routesAttr = this.el.getAttribute('data-routes');
 			if (routesAttr) {
-				_.chain(routesAttr.replace(' ', '').split(','))
+				_.chain(routesAttr.replace(/[\n\t\s]/g, '').split(','))
 				.map(function(each){
 					return each.split(':');
 				})

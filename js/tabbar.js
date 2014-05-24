@@ -3,14 +3,6 @@ define(['require', 'underscore', './container', 'butterfly'],
   
   return Container.extend({
 
-  	initialize: function(options){
-  		var routeElements = this.el.querySelectorAll('[data-route]');
-  		this.routes = _.foldl(routeElements, function(memo, el){
-  			memo[el.getAttribute('data-path')] = el.getAttribute('data-route');
-  			return memo;
-  		}, {});
-  	},
-
 		route: function(paths, params){
 			var me = this;
 			

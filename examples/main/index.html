@@ -42,10 +42,7 @@
 <body>
 
   <!-- key window -->
-  <div id="main" data-window="$container" 
-  data-routes="hall: hall/tab.html,
-              sales: sales/tab.html,
-              sales/detail: sales/detail.html">
+  <div id="main" data-window="$container">
     
     <div id="hall" data-view="$tabbar">
       <ul>
@@ -56,11 +53,14 @@
       <div data-role="tab-content"></div>
     </div>
 
-    <div id="sales" class="active" data-view="$tabbar">
+    <div id="sales" data-view="$tabbar" 
+    data-routes="dashboard: sales/dashboard.html,
+                schedule: sales/schedule.html,
+                memo: sales/memo">
       <ul>
-        <li><a href="#sales/dashboard" data-path="dashboard" data-route="sales/dashboard.html">dashboard</a></li>
-        <li><a href="#sales/schedule" data-path="schedule" data-route="sales/schedule.html">schedule</a></li>
-        <li><a href="#sales/memo" data-path="memo" data-route="sales/memo">memo</a></li>
+        <li><a href="#sales/dashboard">dashboard</a></li>
+        <li><a href="#sales/schedule">schedule</a></li>
+        <li><a href="#sales/memo">memo</a></li>
       </ul>
       <div data-role="tab-content"></div>
     </div>
