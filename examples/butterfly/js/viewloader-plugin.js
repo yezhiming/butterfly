@@ -1,6 +1,20 @@
 define(function () {
   'use strict';
 
+	if (typeof String.prototype.endsWith !== 'function') {
+    String.prototype.endsWith = function(suffix) {
+        return this.indexOf(suffix, this.length - suffix.length) !== -1;
+    };
+	}
+
+	//使用require.js加载View类
+	var loadViewClass = function(require, ViewClassName, success, fail){
+		// var viewLoaded = require.defined(ViewClassName);
+		require(ViewClassName, function(){
+			success.call(arguments);
+		}, fail);
+	}
+
 	//加载元素
 	var loadViewByEL = function(require, el, success, fail){
 		//el的绑定类，若没有，默认为最普通的View（框架定义的）

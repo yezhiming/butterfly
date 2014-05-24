@@ -10,7 +10,7 @@ require.config({
 		text: 'butterfly/vendor/requirejs-text/text',
 		domReady: 'butterfly/vendor/requirejs-domready/domready',
 		i18n: 'butterfly/vendor/requirejs-i18n/i18n',
-		view: 'butterfly/js/viewloader-plugin',
+		view: 'butterfly/js/view-plugin',
 		// lib
 		jquery: 'butterfly/vendor/jquery/jquery',
 		underscore: 'butterfly/vendor/underscore/underscore',
