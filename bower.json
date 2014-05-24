@@ -40,11 +40,6 @@
     "requirejs-text": {
       "": "text.js"
     },
-    "ratchet": {
-      "css": "dist/css/*",
-      "fonts": "dist/fonts/*",
-      "js": "dist/js/*"
-    },
     "iscroll": {
       "": "build/*"
     }
