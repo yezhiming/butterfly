@@ -16,6 +16,7 @@ require.config({
 		backbone: 'butterfly/vendor/backbone/backbone',
 		fastclick: 'butterfly/vendor/fastclick/fastclick',
 		iscroll: 'butterfly/vendor/iscroll/iscroll-probe',
+		moment: 'butterfly/vendor/moment/moment'
 	},
 	waitSeconds: 5,
 	shim: {

@@ -12,17 +12,6 @@
   <meta http-equiv="pragma" content="no-cache" />
 
   <link href="../butterfly/css/butterfly.css" rel="stylesheet"/>
-  <link href="../butterfly/vendor/bootstrap/bootstrap.css" rel="stylesheet"/>
-
-  <script type="text/javascript" src="../butterfly/vendor/jquery/jquery.js"></script>
-  <script type="text/javascript" src="../butterfly/vendor/bootstrap/bootstrap.js"></script>
-  <script>
-  var require = {
-    paths: {
-      'router': 'main/router'
-    }
-  }
-  </script>
   <script type="text/javascript" src="../butterfly/js/require.js" data-main="../butterfly/js/butterfly-amd"></script>
   <style>
   #main {
@@ -54,8 +43,9 @@
 
   <!-- key window -->
   <div id="main" data-window="$container" 
-  data-route="hall:hall/tab.html,
-              sales:sales/tab.html">
+  data-routes="hall: hall/tab.html,
+              sales: sales/tab.html,
+              sales/detail: sales/detail.html">
     
     <div id="hall" data-view="$tabbar">
       <ul>

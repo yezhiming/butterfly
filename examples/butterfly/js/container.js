@@ -8,8 +8,21 @@ define(['butterfly', 'butterfly/view', 'backbone'], function(Butterfly, View, Ba
 
 		initialize: function(options){
 			View.prototype.initialize.call(this, options);
+
 			//add routes support
 			this.routes = {};
+
+			var routesAttr = this.el.getAttribute('data-routes');
+			if (routesAttr) {
+				_.chain(routesAttr.replace(' ', '').split(','))
+				.map(function(each){
+					return each.split(':');
+				})
+				.foldl(function(routes, pair){
+					routes[pair[0]] = pair[1];
+					return routes;
+				}, this.routes);
+			};
 		},
 
 		// add route support
