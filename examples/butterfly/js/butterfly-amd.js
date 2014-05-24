@@ -1,4 +1,3 @@
-var vendorPath = 'butterfly/vendor';
 require.config({
 	baseUrl: '../',
 	packages: [{
@@ -8,15 +7,15 @@ require.config({
 	}],
 	paths: {
 		// require.js plugins
-		text: vendorPath + '/requirejs-text/text',
-		domReady: vendorPath + '/requirejs-domready/domready',
-		i18n: vendorPath +'/requirejs-i18n/i18n',
+		text: 'butterfly/vendor/requirejs-text/text',
+		domReady: 'butterfly/vendor/requirejs-domready/domready',
+		i18n: 'butterfly/vendor/requirejs-i18n/i18n',
 		// lib
-		jquery: vendorPath + '/jquery/jquery',
-		underscore: vendorPath + '/underscore/underscore',
-		backbone: vendorPath + '/backbone/backbone',
-		fastclick: vendorPath + '/fastclick/fastclick',
-		iscroll: vendorPath + '/iscroll/iscroll-probe',
+		jquery: 'butterfly/vendor/jquery/jquery',
+		underscore: 'butterfly/vendor/underscore/underscore',
+		backbone: 'butterfly/vendor/backbone/backbone',
+		fastclick: 'butterfly/vendor/fastclick/fastclick',
+		iscroll: 'butterfly/vendor/iscroll/iscroll-probe',
 	},
 	waitSeconds: 5,
 	shim: {

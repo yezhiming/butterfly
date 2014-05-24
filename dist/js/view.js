@@ -4,14 +4,11 @@ define(['backbone'], function(Backbone){
 
 		initialize: function(options){
 			this.subviews = [];
-			this.routes = {};
 			this.el.view = this;
 		},
 
 		addSubview: function(view){
 			this.subviews.push(view);
-			var path = view.el.getAttribute('data-route') || view.el.id;
-			if (path) this.routes[path] = view;
 		},
 
 		setElement: function(element, delegate){
@@ -30,11 +27,19 @@ define(['backbone'], function(Backbone){
 			Backbone.View.prototype.render.call(this, arguments);
 		},
 
-		show: function(){},
-		hide: function(){},
-		
-		saveState: function(){},
-		loadState: function(){}
+		/* show this view */
+		show: function(){
+			this.onShow();
+		},
+		/* hide this view */
+		hide: function(){
+			this.onHide();
+		},
 
+		//events
+		onShow: function(){},
+		onHide: function(){},
+
+		route: function(){}
 	});
 });

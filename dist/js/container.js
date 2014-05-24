@@ -8,8 +8,15 @@ define(['butterfly', 'butterfly/view', 'backbone'], function(Butterfly, View, Ba
 
 		initialize: function(options){
 			View.prototype.initialize.call(this, options);
+			//add routes support
+			this.routes = {};
+		},
 
-			// this.el.classList.add('container');
+		// add route support
+		addSubview: function(view){
+			View.prototype.addSubview.call(this, view);
+			var path = view.el.getAttribute('data-route') || view.el.id;
+			if (path) this.routes[path] = view;
 		},
 
 		/*单个*/
@@ -38,8 +45,10 @@ define(['butterfly', 'butterfly/view', 'backbone'], function(Butterfly, View, Ba
 			if (subview) {
 				this.subviews.forEach(function(subview){
 					subview.el.classList.remove('active');
+					subview.hide();
 				});
 				subview.el.classList.add('active');
+				subview.show();
 
 				if (array.length > 0) subview.route(array.join('/'));
 			}
