@@ -30,8 +30,14 @@ define(['backbone'], function(Backbone){
 			Backbone.View.prototype.render.call(this, arguments);
 		},
 
+		/* show this view */
 		show: function(){},
+		/* hide this view */
 		hide: function(){},
+
+		//events
+		onShow: function(){},
+		onHide: function(){},
 		
 		saveState: function(){},
 		loadState: function(){}
