@@ -22,6 +22,61 @@ Butterfly.js的特性
 </html>
 ```
 
+## 使用组件
+
+### 通过data-view属性绑定组件
+Butterfly.js允许通过在html元素上添加data-view属性，进行组件绑定
+
+例如以下工程：
+<pre>
+myproject
+	┣member
+	┃  ┗login.js
+	┗main
+	    ┗index.html
+</pre>
+
+其中main/index.html内容如下：
+```html
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Butterfly.js</title>
+	<script type="text/javascript" src="../butterfly/js/require.js" data-main="../butterfly/js/butterfly-amd"></script>
+</head>
+<body>
+	<div data-view="member/login">
+		<input id="username" type="text"/>
+		<input id="password" type="password"/>
+		<button id="login">Login</button>
+	</div>
+</body>
+</html>
+```
+
+member/login.js
+```js
+define(['butterfly/view'], function(View){
+	return View.extend({
+		events: {
+			"click #login": "doLogin"
+		},
+		doLogin: function(){
+			var username= this.$('#username').val();
+			console.log('login as: %s', username);
+		}
+	});
+});
+```
+
+目前内置提供的组件如下：
+* View
+* TabBar
+* Container
+* ListView
+
+内置的组件，统一使用butterfly前缀，例如"butterfly/view"，另外，为了简便起见，可以使用$前缀代表butterfly，例如"$view"
+
 ## 深入理解Butterfly.js
 
 butterfly.js的核心组件
