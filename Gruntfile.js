@@ -51,10 +51,6 @@ module.exports = function(grunt) {
 				files: [
 					//复制require.js
 					{expand: true, cwd: 'vendor/requirejs', src: ['require.js'], dest: 'dist/js'},
-					//复制ratchet的js文件到dist/js
-					{expand: true, cwd: 'vendor/ratchet/js', src: ['ratchet.js'], dest: 'dist/js'},
-					//复制ratchet的图标文件到dist/fonts
-					{expand: true, cwd: 'vendor/ratchet/fonts', src: ['**'], dest: 'dist/fonts'},
 					//复制整个vendor目录
 					{expand: true, cwd: 'vendor/', src: ['**'], dest: 'dist/vendor'}
 				]

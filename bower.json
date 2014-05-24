@@ -27,7 +27,8 @@
     "iscroll": "*",
     "jquery": "*",
     "underscore": "*",
-    "backbone": "*"
+    "backbone": "*",
+    "moment": "*"
   },
   "exportsOverride": {
     "requirejs-domready": {
