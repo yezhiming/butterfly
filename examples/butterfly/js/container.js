@@ -12,6 +12,7 @@ define(['butterfly', 'butterfly/view', 'backbone'], function(Butterfly, View, Ba
 			//add routes support
 			this.routes = {};
 
+			//parse data-routes attribute into routes
 			var routesAttr = this.el.getAttribute('data-routes');
 			if (routesAttr) {
 				_.chain(routesAttr.replace(/[\n\t\s]/g, '').split(','))
@@ -53,9 +54,11 @@ define(['butterfly', 'butterfly/view', 'backbone'], function(Butterfly, View, Ba
 			if (!paths) return;
 
 			var array = paths.split('/');
-			var subview = this.routes[array.shift()];
+			var targetRoute = array.shift();
+			var subview = this.routes[targetRoute];
 
 			if (subview) {
+				this.contentView = subview;
 				this.subviews.forEach(function(subview){
 					subview.el.classList.remove('active');
 					subview.hide();

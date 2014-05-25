@@ -203,10 +203,13 @@
 			var me = this;
 			if (el.getAttribute('data-view')) {
 				ViewLoader.loadView(el, function(view){
-					me.subviews.push(view);
-					if (el.hasAttribute('data-key-window')) {me.keyWindow = view;};
+					if (el.hasAttribute('data-key-window')) {
+						me.keyWindow = view;
+						//TODO: do we need this?
+						view.show();
+					};
 				}, function(err){
-					console.error("loadView:[%s] fail: %s", el, err);
+					console.error("loadView fail: %s", err);
 					throw err;
 				});
 			} else {
