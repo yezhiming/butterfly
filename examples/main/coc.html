@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Butterfly.js Test Case</title>
+  <title>Butterfly.js CoC Test Case</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
   <meta name="viewport" content="initial-scale=1, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0"/>
   <meta name="apple-mobile-web-app-capable" content="yes">
@@ -18,11 +18,6 @@
     position: absolute;
     width: 100%; height: 100%;
   }
-  #main > div {
-    position: absolute;
-    width: 100%; height: 100%;
-    visibility: hidden;
-  }
   #main > div.active {
     visibility: visible;
   }
@@ -35,30 +30,7 @@
 <body>
 
   <!-- key window -->
-  <div id="main" data-window="main/index">
-    
-    <div id="hall" data-view="$tabbar">
-      <ul>
-        <li>hall1</li>
-        <li>hall2</li>
-        <li>hall3</li>
-      </ul>
-      <div data-role="tab-content"></div>
-    </div>
-
-    <div id="sales" data-view="$tabbar" 
-    data-routes="dashboard: sales/dashboard.html,
-                schedule: sales/schedule.html,
-                memo: sales/memo,
-                listview: components/listview.html">
-      <ul>
-        <li><a href="#sales/dashboard">dashboard</a></li>
-        <li><a href="#sales/schedule">schedule</a></li>
-        <li><a href="#sales/memo">memo</a></li>
-      </ul>
-      <div data-role="tab-content"></div>
-    </div>
-    
+  <div id="main" data-window="$coccontainer">
   </div>
 
 </body>

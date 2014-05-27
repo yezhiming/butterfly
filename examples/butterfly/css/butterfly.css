@@ -6,7 +6,8 @@ caption,th,td{text-align:left;font-weight:normal;vertical-align:middle}
 a img{border:none}
 *{-webkit-touch-callout:none;-webkit-user-select:none}
 input{-webkit-user-select:auto}
-.hbox{display:-webkit-box;display:-moz-box;display:-o-box;display:-ms-box;display:box;-webkit-box-orient:horizontal;-moz-box-orient:horizontal;-ms-box-orient:horizontal;box-orient:horizontal}
+@media (orientation:landscape){html.ipad.ios7 > body{position:fixed;bottom:0;width:100%;height:672px !important}
+}.hbox{display:-webkit-box;display:-moz-box;display:-o-box;display:-ms-box;display:box;-webkit-box-orient:horizontal;-moz-box-orient:horizontal;-ms-box-orient:horizontal;box-orient:horizontal}
 .vbox{display:-webkit-box;display:-moz-box;display:-o-box;display:-ms-box;display:box;-webkit-box-orient:vertical;-moz-box-orient:vertical;-ms-box-orient:vertical;box-orient:vertical}
 .flex1{-webkit-box-flex:1;-moz-box-flex:1;-o-box-flex:1;-ms-box-flex:1;box-flex:1;-ms-flex:1 0 auto}
 .flex2{-webkit-box-flex:2;-moz-box-flex:2;-o-box-flex:2;-ms-box-flex:2;box-flex:2;-ms-flex:2 0 auto}
@@ -155,9 +156,6 @@ loading's style
 .page-loading.block .message{
   display: block;
 }
-/**
- * listview.css
- */
 .listview {
   position: absolute;
   top: 0;
@@ -247,9 +245,34 @@ loading's style
   -webkit-animation-iteration-count: infinite;
   -webkit-animation-timing-function: linear;
 }
+
 @-webkit-keyframes loading {
   from { -webkit-transform: rotate(0deg) translateZ(0); }
   to { -webkit-transform: rotate(360deg) translateZ(0); }
+}
+
+.loading-indicator {
+  width: 100%;
+  height: 40px;
+  display: none;
+}
+.loading-indicator>span {
+  margin-left: auto; margin-right: auto;
+  display: block;
+  width: 40px;
+  height: 40px;
+  background-image: url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAABQCAMAAAC5zwKfAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAABhQTFRF39/fyMjI+Pj47+/v0tLS2traxcXF////Yv6wpAAAAAh0Uk5T/////////wDeg71ZAAABLElEQVR42uyY2wrDMAxDlcu6///jwR5Gy+LETk9gg/jZqDVyJNt6wqENuAEXARbVlKoKBJiVjnckZQIwP45PPDIAqOMUug9Y0hkwlduAlx90/KJGnNYrYB3xrhGn6QqYRrxrxGkDsMu7Rpw2Su7yrhGn36T0edeIU88nOoCeAtu8G4AeClq8RwBdjRQp2dnqblKij1FxKQi1jUusIo3tktPQ03MJfkQcnJYUkK/f9uWI/1r5mvVfK1+z/mvla9Z/rXzN+q+Vr2n/NfLVFy47rHz1pLUXVv46QLxknBS8bfDG5p8eLg68fP3PJgWbFG2juNHTowg+LOHjHD5w4iMxPrTjawW++OCrGb488ustvoDzJ4IFR4zFZxb8EMSfqvBjGn/u2zfYDbgc8CXAACUVoCH9hvoSAAAAAElFTkSuQmCC");
+  -webkit-background-size: 40px 40px;
+  background-size: 40px 40px;
+}
+.loading-indicator.active{
+  display: block;
+}
+.loading-indicator.active>span {
+  -webkit-animation-name: loading;
+  -webkit-animation-duration: 2s;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-timing-function: linear;
 }
 
 /*加载更多按钮，这里有一个巧妙的的地方，文字和loading icon的显隐是互斥的，这里在他们的父元素加上或删除.loading class实现*/

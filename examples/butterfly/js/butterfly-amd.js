@@ -32,9 +32,13 @@ require.config({
 	}
 });
 
-require(['butterfly', 'iscroll', "fastclick"],
+require(['butterfly', 'iscroll', 'fastclick'],
 	function(Butterfly, IScroll, FastClick){
 
+		//ios7 issue fix
+		if (navigator.userAgent.match(/iPad;.*CPU.*OS 7_\d/i)) {
+  		$('html').addClass('ipad ios7');
+		}
 		//iOS scroll to top
 		setTimeout(function() {window.scrollTo(0, 1);}, 0);
 
