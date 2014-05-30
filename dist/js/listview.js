@@ -1,6 +1,6 @@
 define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 
-	var options = ['itemTemplate', 'itemview'];
+	var options = ['itemTemplate', 'itemClass', 'dataSource', 'pageSize'];
 
 	/**
 	 * list view component
@@ -16,6 +16,7 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 
 		initialize: function() {
 			var me = this;
+			this.subviews = [];
 
 			//grab params
 			_.extend(this, this.defaults, _.pick(arguments[0], options));
@@ -81,6 +82,24 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 		},
 
 		/*** public method ***/
+
+		reloadData: function(){
+			var me = this;
+			this.page = 0;
+			this.dataSource.loadData(this.page, this.pageSize, function(result){
+				result.forEach(function(data){
+					var item = new this.itemClass({data: data});
+					me.addItem(item);
+				});
+			}, function(error){
+				
+			});
+		},
+
+		addItem: function(item){
+			this.subviews.add(item);
+			this.el.querySelector("ul").appendChild(item.el);
+		},
 
 		// 加载数据
 		load: function(){
