@@ -28,7 +28,8 @@
     "jquery": "*",
     "underscore": "*",
     "backbone": "*",
-    "moment": "*"
+    "moment": "*",
+    "spinjs": "*"
   },
   "exportsOverride": {
     "requirejs-domready": {
