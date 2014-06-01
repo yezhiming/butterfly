@@ -1,24 +1,33 @@
-define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
+/**
+ * list view component
+ */
+define(['jquery', 'underscore', 'backbone', 'iscroll','./ListViewTemplateItem'], 
+	function($, _, Backbone, IScroll, TItem) {
 
-	var options = ['itemTemplate', 'itemview'];
+	var options = ['itemTemplate', 'itemClass', 'dataSource', 'pageSize'];
 
-	/**
-	 * list view component
-	 */
 	var listview = Backbone.View.extend({
 		events: {
 			"click .row": "_onRowTap",
 			"click .loadmore": "_onLoadMore"
 		},
 		defaults: {
-			editing: false
+			editing: false,
+			pageSize: 20
 		},
 
 		initialize: function() {
 			var me = this;
+			this.subviews = [];
 
 			//grab params
 			_.extend(this, this.defaults, _.pick(arguments[0], options));
+
+			//convert itemTemplate to itemClass
+			if (this.itemTemplate) {
+				//this.itemTemplate already compiled
+				this.itemClass = TItem.extend({template: this.itemTemplate});
+			}
 
 			me.IScroll = new IScroll(this.el, {
 				probeType: 2,
@@ -73,14 +82,35 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 		},
 		//删除所有item
 		deleteAllItems: function(refresh){
-			var ul = this.el.querySelector('ul');
-			while (ul.lastChild) {
-				ul.removeChild(ul.lastChild);
-			}
+			_.each(this.subviews, function(subview){
+				subview.remove();
+			});
 			if (refresh) this.refresh();
 		},
 
 		/*** public method ***/
+
+		reloadData: function(){
+			var me = this;
+			
+			this.deleteAllItems();
+
+			this.page = 0;
+			this.dataSource.loadData(this.page, this.pageSize, function(result){
+				result.forEach(function(data){
+					var item = new me.itemClass({data: data});
+					me.addItem(item);
+				});
+				me.refresh();
+			}, function(error){
+				alert(error);
+			});
+		},
+
+		addItem: function(item){
+			this.subviews.push(item);
+			this.el.querySelector("ul").appendChild(item.el);
+		},
 
 		// 加载数据
 		load: function(){

@@ -26,9 +26,9 @@
   background-color: #ecedf1;
 }
 
-.scroller li:hover {
+/*.scroller li:hover {
   background-color: #ddeeff !important;
-}
+}*/
 
 .scroller li:last-child {
   border-bottom-width: 0;

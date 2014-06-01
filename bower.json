@@ -23,6 +23,8 @@
     "requirejs-text": "*",
     "requirejs-i18n": "*",
     "requirejs-domready": "*",
+    "require-css": "*",
+    "requirejs-link": "*",
     "fastclick": "*",
     "iscroll": "*",
     "jquery": "*",

@@ -1,17 +1,19 @@
-define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
+/**
+ * list view component
+ */
+define(['jquery', 'underscore', 'backbone', 'iscroll','./ListViewTemplateItem'], 
+	function($, _, Backbone, IScroll, TItem) {
 
 	var options = ['itemTemplate', 'itemClass', 'dataSource', 'pageSize'];
 
-	/**
-	 * list view component
-	 */
 	var listview = Backbone.View.extend({
 		events: {
 			"click .row": "_onRowTap",
 			"click .loadmore": "_onLoadMore"
 		},
 		defaults: {
-			editing: false
+			editing: false,
+			pageSize: 20
 		},
 
 		initialize: function() {
@@ -20,6 +22,12 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 
 			//grab params
 			_.extend(this, this.defaults, _.pick(arguments[0], options));
+
+			//convert itemTemplate to itemClass
+			if (this.itemTemplate) {
+				//this.itemTemplate already compiled
+				this.itemClass = TItem.extend({template: this.itemTemplate});
+			}
 
 			me.IScroll = new IScroll(this.el, {
 				probeType: 2,
@@ -88,16 +96,17 @@ define(['jquery', 'underscore', 'backbone'], function($, _, Backbone) {
 			this.page = 0;
 			this.dataSource.loadData(this.page, this.pageSize, function(result){
 				result.forEach(function(data){
-					var item = new this.itemClass({data: data});
+					var item = new me.itemClass({data: data});
 					me.addItem(item);
 				});
+				me.refresh();
 			}, function(error){
-				
+				alert(error);
 			});
 		},
 
 		addItem: function(item){
-			this.subviews.add(item);
+			this.subviews.push(item);
 			this.el.querySelector("ul").appendChild(item.el);
 		},
 

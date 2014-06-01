@@ -157,6 +157,10 @@ define(['underscore', 'jquery'], function(_, $){
 					options.fail(xhr, status);
 				}
 			});
+		},
+
+		parseResponse: function(response){
+			
 		}
 
 	});
