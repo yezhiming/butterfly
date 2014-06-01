@@ -82,10 +82,9 @@ define(['jquery', 'underscore', 'backbone', 'iscroll','./ListViewTemplateItem'],
 		},
 		//删除所有item
 		deleteAllItems: function(refresh){
-			var ul = this.el.querySelector('ul');
-			while (ul.lastChild) {
-				ul.removeChild(ul.lastChild);
-			}
+			_.each(this.subviews, function(subview){
+				subview.remove();
+			});
 			if (refresh) this.refresh();
 		},
 
@@ -93,8 +92,19 @@ define(['jquery', 'underscore', 'backbone', 'iscroll','./ListViewTemplateItem'],
 
 		reloadData: function(){
 			var me = this;
+			
+			this.deleteAllItems();
+
+			// var $wrapper = $(me.IScroll.wrapper);
+	    // var $pullDown = $wrapper.find('.pulldown');
+	    // $wrapper.addClass('pulldownrefresh');
+      // me.refresh();
+	    // $pullDown.removeClass('flip').addClass('loading').find('.label').html('加载中...');
+
 			this.page = 0;
 			this.dataSource.loadData(this.page, this.pageSize, function(result){
+				// $wrapper.removeClass('pulldownrefresh');
+				// $pullDown.removeClass('flip loading').find('.label').html('下拉刷新...');
 				result.forEach(function(data){
 					var item = new me.itemClass({data: data});
 					me.addItem(item);
@@ -108,22 +118,6 @@ define(['jquery', 'underscore', 'backbone', 'iscroll','./ListViewTemplateItem'],
 		addItem: function(item){
 			this.subviews.push(item);
 			this.el.querySelector("ul").appendChild(item.el);
-		},
-
-		// 加载数据
-		load: function(){
-			var me = this;
-			// var $wrapper = $(me.IScroll.wrapper);
-	    // var $pullDown = $wrapper.find('.pulldown');
-	    // $wrapper.addClass('pulldownrefresh');
-      // me.refresh();
-	    // $pullDown.removeClass('flip').addClass('loading').find('.label').html('加载中...');
-	    this.deleteAllItems(false);
-			this.trigger('load', this, function(){
-				// $wrapper.removeClass('pulldownrefresh');
-				// $pullDown.removeClass('flip loading').find('.label').html('下拉刷新...');
-				me.refresh();
-			});
 		},
 		
 		//刷新
@@ -167,11 +161,23 @@ define(['jquery', 'underscore', 'backbone', 'iscroll','./ListViewTemplateItem'],
 	  _onLoadMore: function(event) {
 	  	var me = this;
 	  	var loadmoreButton = event.currentTarget;
+	  	//show loading animate
 	  	loadmoreButton.classList.add('loading');
-	  	this.trigger('pullup', this, function(){
+
+	  	this.dataSource.loadData(++this.page, this.pageSize, function(result){
+	  		//stop loading animate
 	  		loadmoreButton.classList.remove('loading');
-	  		me.refresh();
-	  	});
+	  		//append items
+				result.forEach(function(data){
+					var item = new me.itemClass({data: data});
+					me.addItem(item);
+				});
+				me.refresh();
+			}, function(error){
+				//stop loading animate
+				loadmoreButton.classList.remove('loading');
+				me.refresh();
+			});
 	  }
 
 	});
