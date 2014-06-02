@@ -7,6 +7,10 @@ define([
 
 	return View.extend({
 
+		events: {
+			"click #action": "action"
+		},
+
 		initialize: function(options){
 			View.prototype.initialize.call(this, options);
 
@@ -26,6 +30,11 @@ define([
 			});
 
 			this.listview.reloadData();
+		},
+
+		action: function(){
+			console.log('action');
+			this.listview.deleteItems([1,2,3], true);
 		}
 	});
 });

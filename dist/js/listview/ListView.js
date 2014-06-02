@@ -1,5 +1,6 @@
 /**
  * list view component
+ * 下拉刷新实现方式：如检测到下拉控件，假设为40px，则滚动区top: -40px;
  */
 define(['jquery', 'underscore', 'backbone', 'iscroll','./ListViewTemplateItem'], 
 	function($, _, Backbone, IScroll, TItem) {
@@ -8,7 +9,6 @@ define(['jquery', 'underscore', 'backbone', 'iscroll','./ListViewTemplateItem'],
 
 	var listview = Backbone.View.extend({
 		events: {
-			"click .row": "_onRowTap",
 			"click .loadmore": "_onLoadMore"
 		},
 		defaults: {
@@ -34,7 +34,7 @@ define(['jquery', 'underscore', 'backbone', 'iscroll','./ListViewTemplateItem'],
 				scrollX: false,
 		    scrollY: true,
 		    mouseWheel: true,
-		    click: false
+		    tap: true
 			});
 
 			var $wrapper = $(me.IScroll.wrapper);
@@ -72,13 +72,13 @@ define(['jquery', 'underscore', 'backbone', 'iscroll','./ListViewTemplateItem'],
 		},//initialize
 
 		//删除一个或多个item
-		deleteItems: function(array){
-			var ul = this.el.querySelector('ul');
-			_.each(ul.querySelectorAll('li'), function(li){
-				var index = li.getAttribute('data-index');
-				if (_.contains(array, index)) ul.removeChild(li);
+		deleteItems: function(array, refresh){
+			//invoke remove
+			this.subviews = _.filter(this.subviews, function(each, index){
+				if (array.indexOf(index) >= 0) each.remove();
+				return array.indexOf(index) < 0;
 			});
-			this.refresh();
+			if (refresh) this.refresh();
 		},
 		//删除所有item
 		deleteAllItems: function(refresh){
