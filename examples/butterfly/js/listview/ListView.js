@@ -85,6 +85,7 @@ define(['jquery', 'underscore', 'backbone', 'iscroll','./ListViewTemplateItem'],
 			_.each(this.subviews, function(subview){
 				subview.remove();
 			});
+			this.subviews = [];
 			if (refresh) this.refresh();
 		},
 
