@@ -1,4 +1,4 @@
-define(['underscore', 'jquery'], function(_, $){
+define(['underscore', 'jquery', 'backbone'], function(_, $, Backbone){
 
 	var dsOptions = ['identifier', 'url', 'requestParams', 'pageParam', 'pageSizeParam', 'startParam', 'countParam'];
 	
@@ -20,6 +20,8 @@ define(['underscore', 'jquery'], function(_, $){
 
 		this._initCache();
 	}
+
+	DataSource.extend = Backbone.View.extend;
 
 	_.extend(DataSource.prototype, {
 
@@ -78,39 +80,10 @@ define(['underscore', 'jquery'], function(_, $){
 			}
 		},
 
-		loadData: function(start, count, success, fail){
-
-			var me = this;
-			var startParam = this.options.startParam;
-			var countParam = this.options.countParam;
-
-			this._loadFromCache(start, count, function(data){
-				if (data) {
-					if (success) success(data);
-				} else {
-					me._ajaxLoadData({
-						url: me.options.url,
-						data: _.extend({startParam: start, countParam: count}, me.options.requestParams),
-						success: function(data){
-							//update cache
-							_.each(data.data, function(element, index){
-								me.cache[index] = element;
-							});
-							me._persist();
-							//callback
-							if (success) success(data.data);
-						},
-						fail: fail
-					});
-				}
-			});//try to load from cache
-
-		},
-
 		/**
 			* 需在构造函数传入pageSize
 			*/
-		loadDataByPage: function(page, pageSize, success, fail){
+		loadData: function(page, pageSize, success, fail){
 
 			var me = this;
 			

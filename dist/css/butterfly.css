@@ -51,9 +51,21 @@ input{-webkit-user-select:auto}
   width: 100%;
   overflow: hidden;
 }
-/*.listview.pulldownrefresh {
-  top: 45px;
-}*/
+/*包含下拉控件*/
+.listview.withpulldown .scroller{
+  margin-top: -50px;
+  /*-webkit-transform: translate(0px, -50px);*/
+}
+/*临时状态，已下拉*/
+.listview.pulleddown .scroller{
+  margin-top: 0px;
+  /*-webkit-transform: translate(0px, 0px);*/
+}
+
+.scroller {
+  position: absolute;
+  width: 100%;
+}
 
 .scroller ul {
   list-style: none;
@@ -163,12 +175,14 @@ input{-webkit-user-select:auto}
 
 /*加载更多按钮，这里有一个巧妙的的地方，文字和loading icon的显隐是互斥的，这里在他们的父元素加上或删除.loading class实现*/
 .loadmore {
+  width: 100%;
   border: 0px;
   margin-bottom: 0px;
   padding: 10px 0px;
 }
 .loadmore .label {
   line-height: 40px;/*与icon同高，保证是否loading状态，loadmore高度不变*/
+  display: block;
 }
 .loadmore .icon {
   margin: 0 auto;

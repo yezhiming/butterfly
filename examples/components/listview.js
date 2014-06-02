@@ -34,7 +34,8 @@ define([
 
 		action: function(){
 			console.log('action');
-			this.listview.deleteItems([1,2,3], true);
+			// this.listview.deleteItems([1,2,3], true);
+			this.listview.reloadData();
 		}
 	});
 });

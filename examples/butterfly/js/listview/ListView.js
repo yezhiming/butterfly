@@ -37,9 +37,17 @@ define(['jquery', 'underscore', 'backbone', 'iscroll','./ListViewTemplateItem'],
 		    tap: true
 			});
 
+			//隐藏pulldown
+			if (this.el.querySelector('.pulldown')) {
+				this.el.classList.add('withpulldown');
+			};
+			if (this.el.querySelector('.pullup')) {
+				this.$('.scroller').css('margin-bottom', '-50px');
+			}
+
 			var $wrapper = $(me.IScroll.wrapper);
-	    var $pullDown = $wrapper.find('.pulldown');
-	    var $pullUp = $wrapper.find('.pullup');
+	    var $pullDown = this.$pullDown = this.$('.pulldown');
+	    var $pullUp = this.$pullUp = this.$('.pullup');
 
 			me.IScroll.on('scroll', function() {
 				console.log('scroll');
@@ -56,71 +64,18 @@ define(['jquery', 'underscore', 'backbone', 'iscroll','./ListViewTemplateItem'],
 			});
 
 			me.IScroll.on('scrollEnd', function() {
-
+				//if already flip
 		    if ($pullDown.hasClass('flip')) {
-		      $wrapper.addClass('pulldownrefresh');
-		      $pullDown.removeClass('flip').addClass('loading').find('.label').html('加载中...');
-		      me.refresh();//this is IScroll
-		      me._onPullDown($wrapper);
+		      me.onPullDown();
 		    }
-		    // if ($pullUp.hasClass('flip')) {
+		    if ($pullUp.hasClass('flip')) {
 		    //   $pullUp.removeClass('flip').addClass('loading').find('.label').html('加载中...');
-		    //   me._onPullUp($wrapper);
-		    // }
+		      me.onPullUp();
+		    }
 			});
 
 		},//initialize
 
-		//删除一个或多个item
-		deleteItems: function(array, refresh){
-			//invoke remove
-			this.subviews = _.filter(this.subviews, function(each, index){
-				if (array.indexOf(index) >= 0) each.remove();
-				return array.indexOf(index) < 0;
-			});
-			if (refresh) this.refresh();
-		},
-		//删除所有item
-		deleteAllItems: function(refresh){
-			_.each(this.subviews, function(subview){
-				subview.remove();
-			});
-			this.subviews = [];
-			if (refresh) this.refresh();
-		},
-
-		/*** public method ***/
-
-		reloadData: function(){
-			var me = this;
-			
-			this.deleteAllItems();
-
-			// var $wrapper = $(me.IScroll.wrapper);
-	    // var $pullDown = $wrapper.find('.pulldown');
-	    // $wrapper.addClass('pulldownrefresh');
-      // me.refresh();
-	    // $pullDown.removeClass('flip').addClass('loading').find('.label').html('加载中...');
-
-			this.page = 0;
-			this.dataSource.loadData(this.page, this.pageSize, function(result){
-				// $wrapper.removeClass('pulldownrefresh');
-				// $pullDown.removeClass('flip loading').find('.label').html('下拉刷新...');
-				result.forEach(function(data){
-					var item = new me.itemClass({data: data});
-					me.addItem(item);
-				});
-				me.refresh();
-			}, function(error){
-				alert(error);
-			});
-		},
-
-		addItem: function(item){
-			this.subviews.push(item);
-			this.el.querySelector("ul").appendChild(item.el);
-		},
-		
 		//刷新
 		refresh: function(){
 			var me = this;
@@ -138,25 +93,32 @@ define(['jquery', 'underscore', 'backbone', 'iscroll','./ListViewTemplateItem'],
 			}
 		},
 
-		_onPullDown: function($wrapper) {
-			var me = this;
-			//触发下拉事件，参数：[ListView, finishCallback]
-			this.trigger('pulldown', this, function(){
-				var $pullDown = $wrapper.find('.pulldown');
-				$wrapper.removeClass('pulldownrefresh');
-	      // $pullDown.removeClass('flip loading').find('.label').html('下拉刷新...');
-	      me.refresh();
-			});
+		//下拉的默认行为为重新加载数据
+		//可以通过覆盖此方法，实现类似Twitter的加载更多旧数据
+		onPullDown: function() {
+			this.reloadData();
 	  },
   
-  	_onPullUp: function($wrapper) {
+  	onPullUp: function() {
   		var me = this;
-  		//触发上拉事件，参数：[ListView, finishCallback]
-  		this.trigger('pullup', this, function(){
-  			var $pullUp = $wrapper.find('.pullup');
-  			$pullUp.removeClass('flip loading').find('.label').html('上拉加载更多...');
-	      me.refresh();
-  		});
+
+  		this.dataSource.loadData(this.page++, this.pageSize, function(result){
+
+				//stop loading animate
+	  		me.$pullUp.removeClass('flip loading').find('.label').html('上拉加载更多...');
+
+				//append items
+				result.forEach(function(data){
+					var item = new me.itemClass({data: data});
+					me.addItem(item);
+				});
+				me.refresh();
+
+			}, function(error){
+				//stop loading animate
+				loadmoreButton.classList.remove('loading');
+				me.refresh();
+			});
 	  },
 
 	  _onLoadMore: function(event) {
@@ -165,21 +127,88 @@ define(['jquery', 'underscore', 'backbone', 'iscroll','./ListViewTemplateItem'],
 	  	//show loading animate
 	  	loadmoreButton.classList.add('loading');
 
-	  	this.dataSource.loadData(++this.page, this.pageSize, function(result){
-	  		//stop loading animate
+			this.dataSource.loadData(this.page++, this.pageSize, function(result){
+
+				//stop loading animate
 	  		loadmoreButton.classList.remove('loading');
-	  		//append items
+
+				//append items
 				result.forEach(function(data){
 					var item = new me.itemClass({data: data});
 					me.addItem(item);
 				});
 				me.refresh();
+
 			}, function(error){
 				//stop loading animate
 				loadmoreButton.classList.remove('loading');
 				me.refresh();
 			});
+
 	  }
+
+	});
+
+	/**
+	 * Data Mantance
+	 */
+	_.extend(listview.prototype, {
+
+		reloadData: function(){
+			console.log('ListView.reloadData');
+			var me = this;
+			
+			this.page = 0;
+
+			this.el.classList.add('pulleddown');
+      this.$pullDown.removeClass('flip').addClass('loading').find('.label').html('加载中...');
+
+	    this.dataSource.loadData(this.page++, this.pageSize, function(result){
+				setTimeout(function(){
+
+				//success callback
+				me.el.classList.remove('pulleddown');
+				me.$pullDown.removeClass('flip loading').find('.label').html('下拉刷新...');
+
+				//remove all
+				me.deleteAllItems();
+				//append items
+				result.forEach(function(data){
+					var item = new me.itemClass({data: data});
+					me.addItem(item);
+				});
+				me.refresh();
+
+				}, 200);
+			}, function(error){
+				//fail callback
+				fail();
+				me.refresh();
+			});
+		},
+
+		addItem: function(item){
+			this.subviews.push(item);
+			this.el.querySelector("ul").appendChild(item.el);
+		},
+
+		//删除一个或多个item
+		deleteItems: function(array, refresh){
+			//invoke remove
+			this.subviews = _.filter(this.subviews, function(each, index){
+				if (array.indexOf(index) >= 0) each.remove();
+				return array.indexOf(index) < 0;
+			});
+			if (refresh) this.refresh();
+		},
+		//删除所有item
+		deleteAllItems: function(refresh){
+			_.each(this.subviews, function(subview){
+				subview.remove();
+			});
+			this.subviews = [];
+			if (refresh) this.refresh();
+		}
 
 	});
 
