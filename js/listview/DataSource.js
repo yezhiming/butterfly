@@ -114,6 +114,10 @@ define(['underscore', 'jquery', 'backbone'], function(_, $, Backbone){
 
 		},
 
+		setRequestParams: function(params) {
+			this.options.requestParams = params;
+		},
+
 		//simple ajax wrap
 		_ajaxLoadData: function(options){
 
