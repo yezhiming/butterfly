@@ -29,6 +29,8 @@ define([
 				dataSource: this.ds
 			});
 
+			this.listenTo(this.listview, 'itemSelect', this.onItemSelect);
+
 			this.listview.reloadData();
 		},
 
@@ -36,6 +38,10 @@ define([
 			console.log('action');
 			// this.listview.deleteItems([1,2,3], true);
 			this.listview.reloadData();
+		},
+
+		onItemSelect: function(listview, item, index, event){
+			console.log('itemSelect: %d', index);
 		}
 	});
 });

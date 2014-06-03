@@ -9,7 +9,8 @@ define(['jquery', 'underscore', 'backbone', 'iscroll','./ListViewTemplateItem'],
 
 	var listview = Backbone.View.extend({
 		events: {
-			"click .loadmore": "_onLoadMore"
+			"click .loadmore": "onLoadMore",
+			"click li": "onRowSelect"
 		},
 		defaults: {
 			editing: false,
@@ -33,8 +34,7 @@ define(['jquery', 'underscore', 'backbone', 'iscroll','./ListViewTemplateItem'],
 				probeType: 2,
 				scrollX: false,
 		    scrollY: true,
-		    mouseWheel: true,
-		    tap: true
+		    mouseWheel: true
 			});
 
 			//隐藏pulldown
@@ -84,12 +84,16 @@ define(['jquery', 'underscore', 'backbone', 'iscroll','./ListViewTemplateItem'],
 			}, 0);
 		},
 
-		_onRowTap: function(event){
-			var index = event.currentTarget.getAttribute('data-index');
+		//选择了某一行
+		onRowSelect: function(event){
+			var li = event.currentTarget;
+			var liCollection = this.el.querySelector('ul').children;
+			var index = _.indexOf(liCollection, li);
+			var item = this.subviews[index];
 			if (!this.editing) {
-				this.trigger('itemSelect', this, index, event);
+				this.trigger('itemSelect', this, item, index, event);
 			} else {
-				$(event.currentTarget.querySelector('.selection')).toggleClass('selected');
+				$(li.querySelector('.selection')).toggleClass('selected');
 			}
 		},
 
@@ -99,6 +103,7 @@ define(['jquery', 'underscore', 'backbone', 'iscroll','./ListViewTemplateItem'],
 			this.reloadData();
 	  },
   
+  	//点击加载更多
   	onPullUp: function() {
   		var me = this;
 
@@ -121,7 +126,7 @@ define(['jquery', 'underscore', 'backbone', 'iscroll','./ListViewTemplateItem'],
 			});
 	  },
 
-	  _onLoadMore: function(event) {
+	  onLoadMore: function(event) {
 	  	var me = this;
 	  	var loadmoreButton = event.currentTarget;
 	  	//show loading animate
