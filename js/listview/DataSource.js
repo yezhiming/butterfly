@@ -1,6 +1,6 @@
 define(['underscore', 'jquery', 'backbone'], function(_, $, Backbone){
 
-	var dsOptions = ['identifier', 'url', 'requestParams', 'pageParam', 'pageSizeParam', 'startParam', 'countParam'];
+	var dsOptions = ['identifier', 'url', 'requestParams', 'pageParam', 'pageSizeParam', 'startParam', 'countParam', 'usingCache'];
 	
 	/**
 	 * 数据源
@@ -13,7 +13,8 @@ define(['underscore', 'jquery', 'backbone'], function(_, $, Backbone){
 
 		var defaults = {
 			pageParam: 'page', pageSizeParam: 'pageSize',
-			startParam: 'start', countParam: 'count'
+			startParam: 'start', countParam: 'count',
+			usingCache: true
 		};
 		var desiredOptions = _.pick(options, dsOptions);
 		this.options = _.extend(defaults, desiredOptions);
@@ -32,6 +33,10 @@ define(['underscore', 'jquery', 'backbone'], function(_, $, Backbone){
 
 		get: function(key){
 			return this.cache[key];
+		},
+
+		set: function(key, value){
+			this.cache[key] = value;
 		},
 
 		/**
@@ -54,7 +59,9 @@ define(['underscore', 'jquery', 'backbone'], function(_, $, Backbone){
 			window.localStorage['datasource-' + this.options.identifier] = JSON.stringify(this.cache);
 		},
 
-		_loadFromCache: function(start, count, callback){
+		//按照序号缓存（而非页码）
+		_loadFromCache: function(start, count){
+			if (!this.options.usingCache) return null;
 
 			var me = this;
 
@@ -70,13 +77,13 @@ define(['underscore', 'jquery', 'backbone'], function(_, $, Backbone){
 			//如果所有请求数据均在缓冲中，直接pick出来，否则发起请求
 			if (not_required_data_all_in_cache) {
 				console.log('datasource.cache.miss: ' + start + '~' + count);
-				callback(null);
+				return null;
 			} else {
 				console.log('datasource.cache.hit: ' + start + '~' + count);
 				var cachedData = _.chain(this.cache).pick(indexs).map(function(v, k){
-					return me.cache[k];
+					return me.get(k);
 				}).value();
-				callback(cachedData);
+				return cachedData;
 			}
 		},
 
@@ -87,30 +94,31 @@ define(['underscore', 'jquery', 'backbone'], function(_, $, Backbone){
 
 			var me = this;
 			
-			this._loadFromCache(page * pageSize, pageSize, function(data){
-				if (data) {
-					if (success) success(data);
-				} else {
-					var data = {};
-					data[me.options.pageParam] = page;
-					data[me.options.pageSizeParam] = pageSize;
+			var cachedData = this._loadFromCache(page * pageSize, pageSize);
+			if (cachedData) {
+				if (success) success(cachedData);
+			} else {
+				var data = {};
+				data[me.options.pageParam] = page;
+				data[me.options.pageSizeParam] = pageSize;
 
-					me._ajaxLoadData({
-						url: me.options.url,
-						data: _.extend(data, me.options.requestParams),
-						success: function(data){
-							//update cache
+				me._ajaxLoadData({
+					url: me.options.url,
+					data: _.extend(data, me.options.requestParams),
+					success: function(data){
+						//update cache
+						if (me.usingCache) {
 							_.each(data.data, function(element, index){
-								me.cache[page * pageSize + index] = element;
+								me.set(page * pageSize + index, element);
 							});
 							me._persist();
-							//callback
-							if (success) success(data.data);
-						},
-						fail: fail
-					});
-				}
-			});//try to load from cache
+						}
+						//callback
+						if (success) success(data.data);
+					},
+					fail: fail
+				});
+			}
 
 		},
 
