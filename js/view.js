@@ -4,7 +4,14 @@ define(['backbone'], function(Backbone){
 
 		initialize: function(options){
 			this.subviews = [];
-			this.el.view = this;
+		},
+
+		remove: function(){
+			Backbone.View.prototype.remove.call(this);
+			
+			_.each(this.subviews, function(subview){
+				subview.remove();
+			});
 		},
 
 		addSubview: function(view){
@@ -15,16 +22,11 @@ define(['backbone'], function(Backbone){
 			Backbone.View.prototype.setElement.call(this, element, delegate);
 		},
 		
-		remove: function(){
-			delete this.el.view;
-			Backbone.View.prototype.remove.call(this);
-			_.each(this.subviews, function(subview){
-				subview.remove();
-			});
-		},
+		
 
 		render: function(){
 			Backbone.View.prototype.render.call(this, arguments);
+			return this;
 		},
 
 		/* show this view */
@@ -37,8 +39,24 @@ define(['backbone'], function(Backbone){
 		},
 
 		//events
-		onShow: function(){},
-		onHide: function(){},
+		onShow: function(){
+			$(window).on('orientationchange', this.onOrientationchange);
+      $(window).on('resize', this.onWindowResize);
+      $(window).on('scroll', this.onWindowScroll);
+		},
+		onHide: function(){
+			$(window).off('orientationchange', this.onOrientationchange);
+      $(window).off('resize', this.onWindowResize);
+      $(window).off('scroll', this.onWindowScroll);
+		},
+
+		onOrientationchange: function() {
+        this.$('input').blur();
+    },
+
+		onWindowScroll: function() {},
+
+    onWindowResize: function() {},
 
 		route: function(){}
 	});
