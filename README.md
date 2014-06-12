@@ -151,6 +151,29 @@ Butterfly.ViewLoader.loadView('mail/index.html', function(view){
 ## Optimization
 TODO: 加载速度优化
 
+## 模块化开发
+
+### CSS模块化
+* 使用require-css插件按需加载样式，例如显示某个页面需要依赖login/index.css，可以用以下形式，则requirejs会保证样式已经加载：
+
+```js
+require(['css!login/index'], function(){
+
+});
+```
+
+* 每个逻辑页面，使用唯一前缀，例如登陆页面的id为login，则页面css使用以下形式编写：
+
+```css
+#login input {
+	...
+}
+
+#login #login-button{
+	...
+}
+```
+
 
 ## Tips & Traps
 

@@ -90,16 +90,34 @@ input{-webkit-user-select:auto}
   border-bottom-width: 0;
 }
 
+/* listview editing & selecting */
 .scroller li .selection {
+  float: left;
+  width: 30px; height: 100%;
+
+  position: relative;
+
+  /*animation style*/
+  margin-left: -30px;
+  -webkit-transition: margin-left .25s;
+     -moz-transition: margin-left .25s;
+          transition: margin-left .25s;
+}
+
+.scroller li.editing .selection{
+  /*animation style*/
+  margin-left: 0px;
+}
+
+.scroller li .selection span {
+  position: absolute;
   width: 10px; height: 10px;
   -webkit-border-radius: 50px; 
-  margin-left: 10px;
-  margin-top: 20px; 
-  display: none;
+  top: 50%; left: 50%; margin-top: -5px; margin-left: -5px;
   border: 1px solid #359af6;
 }
 
-.scroller li .selection.selected {
+.scroller li .selection.selected span {
   background: #359af6;
 }
 
@@ -179,9 +197,14 @@ input{-webkit-user-select:auto}
   border: 0px;
   margin-bottom: 0px;
   padding: 10px 0px;
+  display: none;
+}
+.loadmore.visible{
+  display: block;
 }
 .loadmore .label {
   line-height: 40px;/*与icon同高，保证是否loading状态，loadmore高度不变*/
+  width: 100%; text-align: center;
   display: block;
 }
 .loadmore .icon {

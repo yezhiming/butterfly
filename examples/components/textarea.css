@@ -1,0 +1,24 @@
+#header {
+	position: absolute;
+	background-color: green;
+	top: 0px;
+	height: 40px; width: 100%;
+}
+
+#wrapper{
+	width: 100%;
+	margin-top: 40px;
+	bottom: 0px;
+}
+
+#wrapper .top-block{
+	height: 200px;
+	background-color: blue;
+}
+#wrapper #content-area{
+	width: 100%;
+	min-height: 66px;
+	-webkit-touch-callout: auto;
+  -webkit-user-select: auto;
+  font-size: 66px;
+}

@@ -8,7 +8,8 @@ define([
 	return View.extend({
 
 		events: {
-			"click #action": "action"
+			"click #edit": "onEdit",
+			"click #refresh": "onRefresh"
 		},
 
 		initialize: function(options){
@@ -30,13 +31,15 @@ define([
 			});
 
 			this.listenTo(this.listview, 'itemSelect', this.onItemSelect);
-
-			this.listview.reloadData();
 		},
 
-		action: function(){
-			console.log('action');
-			// this.listview.deleteItems([1,2,3], true);
+		onEdit: function(){
+			console.log('edit');
+			this.listview.setEditing(!this.listview.editing);
+		},
+
+		onRefresh: function(){
+			console.log('refresh');
 			this.listview.reloadData();
 		},
 

@@ -61,6 +61,7 @@ define(function () {
 					}, {})
 					.each(function(node, bindingName){
 						var ViewClass = require(bindingName);
+						//TODO: inject parent
 						var view = new ViewClass({el: node});
 						me.addSubview(view);
 					});
@@ -74,7 +75,7 @@ define(function () {
 
 	var loadViewClass = function(require, view, success, fail){
 		var me = this;
-		Butterfly.log('loadView: %s', view);
+		console.log('loadView: %s', view);
 		if (typeof view == 'string' && view.endsWith('html')) {
 
 			require(['text!'+view], function(template){

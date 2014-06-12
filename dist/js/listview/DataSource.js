@@ -1,6 +1,6 @@
 define(['underscore', 'jquery', 'backbone'], function(_, $, Backbone){
 
-	var dsOptions = ['identifier', 'url', 'requestParams', 'pageParam', 'pageSizeParam', 'startParam', 'countParam'];
+	var dsOptions = ['identifier', 'url', 'requestParams', 'pageParam', 'pageSizeParam', 'startParam', 'countParam', 'storage'];
 	
 	/**
 	 * 数据源
@@ -13,7 +13,8 @@ define(['underscore', 'jquery', 'backbone'], function(_, $, Backbone){
 
 		var defaults = {
 			pageParam: 'page', pageSizeParam: 'pageSize',
-			startParam: 'start', countParam: 'count'
+			startParam: 'start', countParam: 'count',
+			storage: 'session'
 		};
 		var desiredOptions = _.pick(options, dsOptions);
 		this.options = _.extend(defaults, desiredOptions);
@@ -26,57 +27,84 @@ define(['underscore', 'jquery', 'backbone'], function(_, $, Backbone){
 	_.extend(DataSource.prototype, {
 
 		clear: function(){
-			this.cache = {};
-			this._persist();
+			this.finish = false;
+			this.cache = [];
+			this.persist();
 		},
 
 		get: function(key){
 			return this.cache[key];
 		},
 
+		//key or index
+		set: function(key, value){
+			this.cache[key] = value;
+		},
+
+		size: function(){
+			return this.cache.length;
+		},
+
 		/**
 		 * 初始化缓存
 		 */
 		_initCache: function(){
-			var localstorage = window.localStorage['datasource-' + this.options.identifier];
+			var localstorage;
+			switch(this.options.storage) {
+				case 'local':
+					localstorage = window.localStorage['datasource-' + this.options.identifier];
+					break;
+				case 'session':
+					localstorage = window.sessionStorage['datasource-' + this.options.identifier];
+					break;
+				case 'none':
+					localstorage = null;
+					break;
+			}
+			
 			if (localstorage) {
 				this.cache = JSON.parse(localstorage);
 			} else {
-				this.cache = {};
+				this.cache = [];
 			}
 		},
 
 		/**
 		 * 持久化缓存
 		 */
-		_persist: function(){
-			console.log('数据源[%s]持久化...', this.options.identifier);
-			window.localStorage['datasource-' + this.options.identifier] = JSON.stringify(this.cache);
+		persist: function(){
+			console.log('数据源[%s]持久化，介质[%s]', this.options.identifier, this.options.storage);
+			switch(this.options.storage) {
+				case 'local':
+					window.localStorage['datasource-' + this.options.identifier] = JSON.stringify(this.cache);
+					break;
+				case 'session':
+					window.sessionStorage['datasource-' + this.options.identifier] = JSON.stringify(this.cache);
+					break;
+				case 'none':
+					break;
+			}
 		},
 
-		_loadFromCache: function(start, count, callback){
-
+		//按照序号缓存（而非页码）
+		_loadFromCache: function(start, count){
 			var me = this;
 
-			//所有的缓存key，拼成数组
-			var indexs = [];
-			for (var i = start; i < start + count; i++) indexs.push(i);
+			//所有的缓存key，下标
+			var indexs = _.range(start, start + count);
 
-			//检查所有请求数据都在cache中（检查key）
-			var not_required_data_all_in_cache = _.some(indexs, function(value){ 
-				return !_.has(me.cache, value);
+			//有任何一条数据不在缓存中（根据下标获取判断）
+			var any_not_in = _.any(indexs, function(index){
+				return me.cache[index] == undefined;
 			});
 
-			//如果所有请求数据均在缓冲中，直接pick出来，否则发起请求
-			if (not_required_data_all_in_cache) {
+			if (any_not_in) {
 				console.log('datasource.cache.miss: ' + start + '~' + count);
-				callback(null);
+				return null;
 			} else {
 				console.log('datasource.cache.hit: ' + start + '~' + count);
-				var cachedData = _.chain(this.cache).pick(indexs).map(function(v, k){
-					return me.cache[k];
-				}).value();
-				callback(cachedData);
+				var cachedData = this.cache.slice(start, start + count);
+				return cachedData;
 			}
 		},
 
@@ -87,44 +115,51 @@ define(['underscore', 'jquery', 'backbone'], function(_, $, Backbone){
 
 			var me = this;
 			
-			this._loadFromCache(page * pageSize, pageSize, function(data){
-				if (data) {
-					if (success) success(data);
-				} else {
-					var data = {};
-					data[me.options.pageParam] = page;
-					data[me.options.pageSizeParam] = pageSize;
+			var cachedData = this._loadFromCache(page * pageSize, pageSize);
+			if (cachedData) {
+				if (success) success(cachedData);
+			} else {
+				var data = {};
+				data[me.options.pageParam] = page;
+				data[me.options.pageSizeParam] = pageSize;
 
-					me._ajaxLoadData({
-						url: me.options.url,
-						data: _.extend(data, me.options.requestParams),
-						success: function(data){
-							//update cache
-							_.each(data.data, function(element, index){
-								me.cache[page * pageSize + index] = element;
-							});
-							me._persist();
-							//callback
-							if (success) success(data.data);
-						},
-						fail: fail
-					});
-				}
-			});//try to load from cache
+				me.ajaxLoadData({
+					url: me.options.url,
+					data: _.extend(data, me.options.requestParams),
+					success: function(resultArray){
+						//update 
+						_.each(resultArray, function(element, index){
+							me.set(page * pageSize + index, element);
+						});
+						me.persist();
+						//callback
+						if (success) success(resultArray, me.finish);
+					},
+					fail: fail
+				});
+			}
 
 		},
 
-		//simple ajax wrap
-		_ajaxLoadData: function(options){
+		setRequestParams: function(params) {
+			this.options.requestParams = params;
+		},
 
+		//simple ajax wrap
+		//options.data
+		//options.success
+		//options.fail
+		ajaxLoadData: function(options){
+
+			var me = this;
 			$.ajax({
 				url: options.url,
 				type: 'GET',
 				dataType: "json",
 				data: options.data,
 				timeout: 5000,
-				success: function(data) {
-					options.success(data);
+				success: function(response) {
+					options.success(response);
 				},
 				error: function(xhr, status) {
 					options.fail(xhr, status);
@@ -132,8 +167,8 @@ define(['underscore', 'jquery', 'backbone'], function(_, $, Backbone){
 			});
 		},
 
-		parseResponse: function(response){
-			
+		setFinish: function(){
+			this.finish = true;
 		}
 
 	});
