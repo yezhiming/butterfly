@@ -5,7 +5,7 @@
 define(['jquery', 'underscore', 'backbone', 'iscroll','./ListViewTemplateItem'], 
 	function($, _, Backbone, IScroll, TItem) {
 
-	var options = ['itemTemplate', 'itemClass', 'dataSource', 'pageSize'];
+	var options = ['id', 'autoLoad' ,'itemTemplate', 'itemClass', 'dataSource', 'pageSize'];
 
 	var listview = Backbone.View.extend({
 		events: {
@@ -13,6 +13,7 @@ define(['jquery', 'underscore', 'backbone', 'iscroll','./ListViewTemplateItem'],
 			"click li": "onRowSelect"
 		},
 		defaults: {
+			autoLoad: true,
 			editing: false,
 			pageSize: 20
 		},
@@ -74,7 +75,29 @@ define(['jquery', 'underscore', 'backbone', 'iscroll','./ListViewTemplateItem'],
 		    }
 			});
 
+			if (this.autoLoad){
+				var state = this.loadState();
+				if (state) {
+					this.restoreData(state);
+				} else {
+					this.reloadData();
+				}
+			}
+
 		},//initialize
+
+		saveState: function(){
+			var state = {
+				y: this.IScroll.y,
+				page: this.page
+			}
+			window.sessionStorage['ListView:' + this.id] = JSON.stringify(state);
+		},
+
+		loadState: function(){
+			var state = window.sessionStorage['ListView:' + this.id];
+			return state ? JSON.parse(state) : state;
+		},
 
 		//刷新
 		refresh: function(){
@@ -115,6 +138,7 @@ define(['jquery', 'underscore', 'backbone', 'iscroll','./ListViewTemplateItem'],
 				//append items
 				result.forEach(function(data){
 					var item = new me.itemClass({data: data});
+					item.setEditing(me.editing);
 					me.addItem(item);
 				});
 				me.refresh();
@@ -123,6 +147,8 @@ define(['jquery', 'underscore', 'backbone', 'iscroll','./ListViewTemplateItem'],
 				//stop loading animate
 				loadmoreButton.classList.remove('loading');
 				me.refresh();
+
+				alert('数据加载失败');
 			});
 	  },
 
@@ -132,26 +158,50 @@ define(['jquery', 'underscore', 'backbone', 'iscroll','./ListViewTemplateItem'],
 	  	//show loading animate
 	  	loadmoreButton.classList.add('loading');
 
-			this.dataSource.loadData(this.page++, this.pageSize, function(result){
+			this.dataSource.loadData(this.page + 1, this.pageSize, function(result, finish){
+
+				//increase current page number when success
+				me.page++;
 
 				//stop loading animate
 	  		loadmoreButton.classList.remove('loading');
 
-				//append items
-				result.forEach(function(data){
-					var item = new me.itemClass({data: data});
-					me.addItem(item);
-				});
+
+	  		if (finish) {
+	  			loadmoreButton.classList.remove('visible');
+	  		} else {
+	  			loadmoreButton.classList.add('visible');
+	  		}
+
+	  		if (result && result.length > 0) {
+					//append items
+					result.forEach(function(data){
+						var item = new me.itemClass({data: data});
+						item.setEditing(me.editing);
+						me.addItem(item);
+					});
+			 	} else {
+			 		//show no data
+
+			 	}
 				me.refresh();
+
 
 			}, function(error){
 				//stop loading animate
 				loadmoreButton.classList.remove('loading');
 				me.refresh();
+
+				alert('数据加载失败');
 			});
 
 	  }
 
+	}, {
+		//clear listview state by id, this API may be changed later
+		clear: function(id){
+			delete window.sessionStorage['ListView:' + id];
+		}
 	});
 
 	/**
@@ -159,35 +209,103 @@ define(['jquery', 'underscore', 'backbone', 'iscroll','./ListViewTemplateItem'],
 	 */
 	_.extend(listview.prototype, {
 
+		setEditing: function(editing){
+			
+			this.subviews.forEach(function(subview){
+				subview.setEditing(editing);
+			});
+
+			this.editing = editing;
+		},
+
+		reset: function(){
+			
+			//删除所有cell
+			this.deleteAllItems();
+			
+			//重置页码
+			this.page = 0;
+
+			//重置下拉刷新
+			this.el.classList.add('pulleddown');
+      this.$pullDown.removeClass('flip').addClass('loading').find('.label').html('加载中...');
+
+      //reset loadmore button
+      this.$('.loadmore').removeClass('visible');
+
+      this.refresh();
+		},
+
 		reloadData: function(){
 			console.log('ListView.reloadData');
 			var me = this;
 			
-			this.page = 0;
+			this.reset();
 
-			this.el.classList.add('pulleddown');
-      this.$pullDown.removeClass('flip').addClass('loading').find('.label').html('加载中...');
+      this.dataSource.clear();
 
-	    this.dataSource.loadData(this.page++, this.pageSize, function(result){
-				setTimeout(function(){
+	    this.dataSource.loadData(this.page, this.pageSize, function(result, finish){
 
 				//success callback
 				me.el.classList.remove('pulleddown');
 				me.$pullDown.removeClass('flip loading').find('.label').html('下拉刷新...');
+
+				//loadmore
+				if (!finish) me.$('.loadmore').addClass('visible');
 
 				//remove all
 				me.deleteAllItems();
 				//append items
 				result.forEach(function(data){
 					var item = new me.itemClass({data: data});
+					item.setEditing(me.editing);
 					me.addItem(item);
 				});
 				me.refresh();
 
-				}, 200);
+				me.trigger('load', me);
+
 			}, function(error){
-				//fail callback
-				fail();
+
+				//success callback
+				me.el.classList.remove('pulleddown');
+				me.$pullDown.removeClass('flip loading').find('.label').html('下拉刷新...');
+
+				alert('数据加载失败');
+
+				me.refresh();
+			});
+		},
+
+		//从缓存中恢复数据
+		restoreData: function(state){
+			console.log('ListView.restoreData');
+			var me = this;
+
+			this.page = state.page;
+
+			this.dataSource.loadData(0, (this.page + 1) * this.pageSize, function(result, finish){
+
+				//loadmore
+				if (!finish) me.$('.loadmore').addClass('visible');
+
+				//remove all
+				me.deleteAllItems();
+				//append items
+				result.forEach(function(data){
+					var item = new me.itemClass({data: data});
+					item.setEditing(me.editing);
+					me.addItem(item);
+				});
+				me.refresh();
+
+				me.IScroll.scrollTo(0, state.y);
+				setTimeout(function(){
+					me.trigger('load', me);
+				},0)
+
+			}, function(error){
+				alert('数据加载失败');
 				me.refresh();
 			});
 		},
@@ -212,6 +330,7 @@ define(['jquery', 'underscore', 'backbone', 'iscroll','./ListViewTemplateItem'],
 				subview.remove();
 			});
 			this.subviews = [];
+
 			if (refresh) this.refresh();
 		}
 
