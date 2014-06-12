@@ -8,12 +8,12 @@ define(['../view'], function(View){
 			View.prototype.initialize.call(this, arguments);
 
 			this.$el.append('<div class="selection"><span></span></div>');
-			this.$el.append('<div class="content"></div>');
+			this.$el.append('<div class="item-content"></div>');
 			this.$el.append('<div class="controls"></div>');
 		},
 
 		setContent: function(content){
-			this.$('.content').append(content);
+			this.$('.item-content').append(content);
 
 			return this;
 		},

@@ -38,10 +38,6 @@
   background-color: #ecedf1;
 }
 
-/*.scroller li:hover {
-  background-color: #ddeeff !important;
-}*/
-
 .scroller li:last-child {
   border-bottom-width: 0;
 }
@@ -85,6 +81,10 @@
   font-size: 14px;
   color: #888;
   text-align: center;
+}
+.pulldown .label, .pullup .label {
+  position: absolute;
+  left: 0px; right: 0px;
 }
 .pulldown .icon, .pullup .icon {
   display: block;
