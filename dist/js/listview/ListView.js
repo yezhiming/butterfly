@@ -116,7 +116,7 @@ define(['jquery', 'underscore', 'backbone', 'iscroll','./ListViewTemplateItem'],
 			if (!this.editing) {
 				this.trigger('itemSelect', this, item, index, event);
 			} else {
-				$(li.querySelector('.selection')).toggleClass('selected');
+				item.toggleSelect();
 			}
 		},
 
@@ -332,6 +332,25 @@ define(['jquery', 'underscore', 'backbone', 'iscroll','./ListViewTemplateItem'],
 			this.subviews = [];
 
 			if (refresh) this.refresh();
+		},
+
+		selectedItems: function(){
+			var me = this;
+			return _.filter(this.subviews, function(item){
+				return item.selected;
+			});
+		},
+
+		selectedIndexes: function(){
+			var items = this.subviews;
+			return _.chain(items)
+			.filter(function(item){
+				return item.selected;
+			})
+			.map(function(item){
+				return items.indexOf(item);
+			})
+			.value();
 		}
 
 	});

@@ -26,7 +26,17 @@ define(['../view'], function(View){
 			}
 		},
 
+		setSelected: function(selected){
+			this.selected = selected;
+			if (this.selected) {
+				this.$('.selection').addClass('selected');
+			} else {
+				this.$('.selection').removeClass('selected');
+			}
+		},
+
 		toggleSelect: function(){
+			this.selected = !this.selected;
 			this.$('.selection').toggleClass('selected');
 		}
 	});

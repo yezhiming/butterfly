@@ -9,7 +9,9 @@ define([
 
 		events: {
 			"click #edit": "onEdit",
-			"click #refresh": "onRefresh"
+			"click #refresh": "onRefresh",
+			"click #selectedItems": "onGetSelectedItems",
+			"click #selectedIndexes": "onGetSelectedIndexes"
 		},
 
 		initialize: function(options){
@@ -41,6 +43,16 @@ define([
 		onRefresh: function(){
 			console.log('refresh');
 			this.listview.reloadData();
+		},
+
+		onGetSelectedItems: function(){
+			var selected = this.listview.selectedItems();
+			alert(selected);
+		},
+
+		onGetSelectedIndexes: function(){
+			var selected = this.listview.selectedIndexes();
+			alert(selected);
 		},
 
 		onItemSelect: function(listview, item, index, event){
