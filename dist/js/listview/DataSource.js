@@ -159,6 +159,9 @@ define(['underscore', 'jquery', 'backbone'], function(_, $, Backbone){
 				data: options.data,
 				timeout: 5000,
 				success: function(response) {
+					if (response.length && response.length == 0) {
+						me.setFinish(true);
+					};
 					options.success(response);
 				},
 				error: function(xhr, status) {

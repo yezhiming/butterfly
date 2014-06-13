@@ -227,11 +227,14 @@ define(['jquery', 'underscore', 'backbone', 'iscroll','./ListViewTemplateItem'],
 			this.page = 0;
 
 			//重置下拉刷新
-			this.el.classList.add('pulleddown');
-      this.$pullDown.removeClass('flip').addClass('loading').find('.label').html('加载中...');
+			this.el.classList.remove('pulleddown');
+			this.$pullDown.removeClass('flip loading').find('.label').html('下拉刷新...');
 
       //reset loadmore button
       this.$('.loadmore').removeClass('visible');
+
+      //reset message area
+      this.$('.message, .message > div').removeClass('visible');
 
       this.refresh();
 		},
@@ -244,6 +247,10 @@ define(['jquery', 'underscore', 'backbone', 'iscroll','./ListViewTemplateItem'],
 
       this.dataSource.clear();
 
+      //启动下拉刷新加载中动画
+			this.el.classList.add('pulleddown');
+      this.$pullDown.removeClass('flip').addClass('loading').find('.label').html('加载中...');
+
 	    this.dataSource.loadData(this.page, this.pageSize, function(result, finish){
 
 				//success callback
@@ -251,7 +258,11 @@ define(['jquery', 'underscore', 'backbone', 'iscroll','./ListViewTemplateItem'],
 				me.$pullDown.removeClass('flip loading').find('.label').html('下拉刷新...');
 
 				//loadmore
-				if (!finish) me.$('.loadmore').addClass('visible');
+				if (finish) {
+					me.$('.message, .message .empty').addClass('visible');
+				} else {
+					me.$('.loadmore').addClass('visible');
+				}
 
 				//remove all
 				me.deleteAllItems();
@@ -266,13 +277,8 @@ define(['jquery', 'underscore', 'backbone', 'iscroll','./ListViewTemplateItem'],
 				me.trigger('load', me);
 
 			}, function(error){
-
-				//success callback
-				me.el.classList.remove('pulleddown');
-				me.$pullDown.removeClass('flip loading').find('.label').html('下拉刷新...');
-
-				alert('数据加载失败');
-
+				me.reset();
+				me.$('.message, .message .error').addClass('visible');
 				me.refresh();
 			});
 		},
@@ -287,7 +293,11 @@ define(['jquery', 'underscore', 'backbone', 'iscroll','./ListViewTemplateItem'],
 			this.dataSource.loadData(0, (this.page + 1) * this.pageSize, function(result, finish){
 
 				//loadmore
-				if (!finish) me.$('.loadmore').addClass('visible');
+				if (finish) {
+					me.$('.message, .message .empty').addClass('visible');
+				} else {
+					me.$('.loadmore').addClass('visible');
+				}
 
 				//remove all
 				me.deleteAllItems();
@@ -305,7 +315,8 @@ define(['jquery', 'underscore', 'backbone', 'iscroll','./ListViewTemplateItem'],
 				},0)
 
 			}, function(error){
-				alert('数据加载失败');
+				me.reset();
+				me.$('.message, .message .error').addClass('visible');
 				me.refresh();
 			});
 		},
