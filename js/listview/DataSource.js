@@ -1,4 +1,4 @@
-define(['underscore', 'jquery', 'backbone'], function(_, $, Backbone){
+define(['underscore', 'jquery', 'butterfly/extend'], function(_, $, extend){
 
 	var dsOptions = ['identifier', 'url', 'requestParams', 'pageParam', 'pageSizeParam', 'startParam', 'countParam', 'storage'];
 	
@@ -22,7 +22,7 @@ define(['underscore', 'jquery', 'backbone'], function(_, $, Backbone){
 		this._initCache();
 	}
 
-	DataSource.extend = Backbone.View.extend;
+	DataSource.extend = extend;
 
 	_.extend(DataSource.prototype, {
 
@@ -87,7 +87,7 @@ define(['underscore', 'jquery', 'backbone'], function(_, $, Backbone){
 		},
 
 		//按照序号缓存（而非页码）
-		_loadFromCache: function(start, count){
+		loadDataFromCache: function(start, count){
 			var me = this;
 
 			//所有的缓存key，下标
@@ -115,7 +115,7 @@ define(['underscore', 'jquery', 'backbone'], function(_, $, Backbone){
 
 			var me = this;
 			
-			var cachedData = this._loadFromCache(page * pageSize, pageSize);
+			var cachedData = this.loadDataFromCache(page * pageSize, pageSize);
 			if (cachedData) {
 				if (success) success(cachedData);
 			} else {
@@ -159,9 +159,6 @@ define(['underscore', 'jquery', 'backbone'], function(_, $, Backbone){
 				data: options.data,
 				timeout: 5000,
 				success: function(response) {
-					if (response.length && response.length == 0) {
-						me.setFinish(true);
-					};
 					options.success(response);
 				},
 				error: function(xhr, status) {

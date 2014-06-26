@@ -42,7 +42,6 @@ define(function () {
 				template: htmlTemplate,
 
 				initialize: function(){
-					TopViewClass.prototype.initialize.call(this, arguments);
 					
 					//转换成DOM
 					var el = document.createElement('div');
@@ -65,6 +64,8 @@ define(function () {
 						var view = new ViewClass({el: node});
 						me.addSubview(view);
 					});
+					
+					TopViewClass.prototype.initialize.call(this, arguments);
 				}
 			});
 
