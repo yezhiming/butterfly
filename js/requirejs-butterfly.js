@@ -65,7 +65,7 @@ define(function () {
 						me.addSubview(view);
 					});
 					
-					TopViewClass.prototype.initialize.call(this, arguments);
+					TopViewClass.prototype.initialize.apply(this, arguments);
 				}
 			});
 
