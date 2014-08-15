@@ -35,7 +35,7 @@ require.config({
 	}
 });
 
-require(['butterfly', 'iscroll', 'fastclick'],
+require(['butterfly', 'iscroll', 'butterfly/fastclick'],
 	function(Butterfly, IScroll, FastClick){
 
 		//ios7 issue fix
@@ -44,6 +44,7 @@ require(['butterfly', 'iscroll', 'fastclick'],
 		}
 		//iOS scroll to top
 		setTimeout(function() {window.scrollTo(0, 1);}, 0);
+
 
 		//enable fastclick
 		FastClick.attach(document.body);

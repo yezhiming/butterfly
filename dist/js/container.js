@@ -1,4 +1,4 @@
-define(['butterfly', 'butterfly/view', 'backbone'], function(Butterfly, View, Backbone){
+define(['butterfly', 'butterfly/view'], function(Butterfly, View){
 
 	/**
 	 * TODO:
@@ -26,9 +26,10 @@ define(['butterfly', 'butterfly/view', 'backbone'], function(Butterfly, View, Ba
 			};
 		},
 
-		// add route support
 		addSubview: function(view){
 			View.prototype.addSubview.call(this, view);
+
+			// add route support
 			var path = view.el.getAttribute('data-route') || view.el.id;
 			if (path) this.routes[path] = view;
 		},
@@ -50,7 +51,7 @@ define(['butterfly', 'butterfly/view', 'backbone'], function(Butterfly, View, Ba
 
 		//目前是取path的第一节作为id，找到相应的子节点，隐藏其他，显示出来
 		route: function(paths, params){
-			
+
 			if (!paths) return;
 
 			var array = paths.split('/');

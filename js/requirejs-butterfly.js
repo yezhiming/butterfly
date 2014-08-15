@@ -1,4 +1,4 @@
-define(function () {
+define([], function () {
   'use strict';
 
 	if (typeof String.prototype.endsWith !== 'function') {
@@ -15,8 +15,24 @@ define(function () {
 		}, fail);
 	}
 
-	var loadViewClassByEL = function(require, htmlTemplate, success, fail){
+  //获取绑定，以及绑定语法糖
+  function getBinding(el, contextPath){
+    var bindingName = el.getAttribute('data-window') || el.getAttribute('data-view');
+    bindingName = bindingName != null ? bindingName : '$view';
+
+    //patch for '$'
+    bindingName = bindingName.replace('$', 'butterfly/')
+
+    //patch for '.' and empty value
+    bindingName = (bindingName == '.' || bindingName == '') ? contextPath.replace('.html', '') : bindingName;
+
+    return bindingName;
+  }
+
+  //TODO: 如果该html页面页面有两个根节点，例如div.header div.content，则自动创建一个包裹div，并自动赋予id
+	var loadViewClassByEL = function(require, view, htmlTemplate, success, fail){
 		//只要body内的类容
+    //TODO: 目前带上了body标签，改为只要里面的东西
 		htmlTemplate = (/<html/i.test(htmlTemplate)) ? htmlTemplate.match(/<body[^>]*>([\s\S.]*)<\/body>/i)[0] : htmlTemplate;
 		//转换成DOM
 		var el = document.createElement('div');
@@ -24,11 +40,12 @@ define(function () {
 		el = el.firstElementChild;
 
 		//el的绑定类，若没有，默认为最普通的View（框架定义的）
-		var elementBinding = (el.getAttribute('data-window') || el.getAttribute('data-view') || '$view').replace('$', 'butterfly/');
-		//el子节点的绑定类集合
+		var elementBinding = getBinding(el, view);
+
+    //el子节点的绑定类集合
 		var el_view_bindings = el.querySelectorAll('[data-view]');
-		var view_names = _.map(el_view_bindings, function(node){ 
-			return node.getAttribute('data-view').replace('$', 'butterfly/');
+		var view_names = _.map(el_view_bindings, function(node){
+			return getBinding(node, view);
 		});
 		view_names.unshift(elementBinding);
 
@@ -42,7 +59,7 @@ define(function () {
 				template: htmlTemplate,
 
 				initialize: function(){
-					
+
 					//转换成DOM
 					var el = document.createElement('div');
 					el.innerHTML = this.template;
@@ -64,8 +81,8 @@ define(function () {
 						var view = new ViewClass({el: node});
 						me.addSubview(view);
 					});
-					
-					TopViewClass.prototype.initialize.apply(this, arguments);
+
+					TopViewClass.prototype.initialize.call(this, arguments);
 				}
 			});
 
@@ -80,7 +97,7 @@ define(function () {
 		if (typeof view == 'string' && view.endsWith('html')) {
 
 			require(['text!'+view], function(template){
-				loadViewClassByEL(require, template, success, fail);
+				loadViewClassByEL(require, view, template, success, fail);
 			}, fail);
 
 		} else if (typeof view == 'string') {
@@ -97,10 +114,23 @@ define(function () {
   			onLoad(View);
 
   		}, function(err){
-  			onload.error(err);
+  			onLoad.error(err);
 
   		});
-  	}
+  	},
+
+    //for non-amd usage
+    loadViewClass: loadViewClass,
+
+    //for non-amd usage
+    loadView: function(success, fail){
+
+      loadViewClass(require, name, function(View){
+
+        var view = new View();
+        success(view);
+      }, fail);
+    }
   }
 
   return plugin;

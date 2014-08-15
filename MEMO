@@ -1,0 +1,14 @@
+load view
+wrap | unwrap mode
+
+define(['butterfly/listview', 'listview.editable', 'listview.searchable'], 
+	function(ListView, EditableExtension, SearchableExtension){
+
+		
+		ListView.extend(EditableExtension);
+		ListView.extend(SearchableExtension);
+		var list = new ListView();
+});
+
+* 插件机制
+* view的属性传递到子view
