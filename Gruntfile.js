@@ -34,11 +34,12 @@ module.exports = function(grunt) {
 					'include css': true
 				},
 				files: {
-					'dist/css/butterfly.css': 'stylus/butterfly.styl'
+					'dist/css/butterfly.css': 'stylus/butterfly.styl',
+					'css/butterfly.css': 'stylus/butterfly.styl'
 				}
 			}
 		},
-		
+
 		//copy the src/images and vendor to dist
 		copy: {
 			source: {
@@ -59,7 +60,7 @@ module.exports = function(grunt) {
 				files: [{expand: true, cwd: 'dist/', src: ['**'], dest: 'examples/butterfly/'}]
 			}
 		}
-		
+
 	});
 
 	grunt.loadNpmTasks('grunt-bower-task');
