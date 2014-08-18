@@ -54,6 +54,7 @@ define([], function () {
 
 			var TopViewClass = arguments[0];
 
+      //when this proxy class initialize called, the html element will assign to el
 			var ProxyViewClass = TopViewClass.extend({
 
 				template: htmlTemplate,

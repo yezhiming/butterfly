@@ -145,6 +145,7 @@
 				Backbone.history.start({pushState: false, root: rootPath});
 
 				//invoke the window onShow
+				view.render();
 				view.show();
 
 	    }, function(err){
