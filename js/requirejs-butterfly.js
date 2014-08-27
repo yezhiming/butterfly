@@ -37,7 +37,7 @@ define([], function () {
 		//转换成DOM
 		var el = document.createElement('div');
 		el.innerHTML = htmlTemplate;
-		el = el.firstElementChild;
+		el = el.childElementCount == 1 ? el.firstElementChild : el;
 
 		//el的绑定类，若没有，默认为最普通的View（框架定义的）
 		var elementBinding = getBinding(el, view);
@@ -64,7 +64,7 @@ define([], function () {
 					//转换成DOM
 					var el = document.createElement('div');
 					el.innerHTML = this.template;
-					el = el.firstElementChild;
+					el = el.childElementCount == 1 ? el.firstElementChild : el;
 					//replace element
 					this.setElement(el);
 
