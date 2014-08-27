@@ -24,7 +24,7 @@
     "requirejs-i18n": "*",
     "requirejs-domready": "*",
     "require-css": "*",
-    "requirejs-link": "*",
+    "requirejs-hogan": "*",
     "fastclick": "*",
     "iscroll": "*",
     "jquery": "*",
