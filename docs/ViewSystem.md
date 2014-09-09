@@ -16,12 +16,25 @@ MVC一种设计模式，能够将业务逻辑，数据和用户界面代码进�
 
 ## Butterfly.js的视图（View）
 
-Butterfly.js的View继承于[Backbone.js](http://backbonejs.org)的View
+Butterfly.js的架构基于[Backbone.js](http://backbonejs.org)，Butterfly.View继承自Backbone.View。
+
+### Backbone.View基础
 
 View的实例会关联到一个HTML元素上：
 * 通过设置el属性，直接关联到一个HTML元素上
 * 通过设置tagName，className属性，View对象初始化时，会生成一个detach（没有父节点，不在页面上）的HTML元素
 * 通过调用setElement方法，关联到别的HTML元素上
+
+具体请参考[Backbone.js官方文档](http://backbonejs.org/#View)
+
+### Butterfly.View
+Butterfly.View在Backbone.View的基础上，增加了如下特性：
+* 默认返回键事件绑定
+* window的orientationchange, resize, scroll事件响应
+* onShow, onHide回调
+* 子视图管理
+* 路由功能（route方法）
+* CSS3动画支持
 
 ```js
 define(['butterfly/View'], function(View){
