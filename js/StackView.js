@@ -16,12 +16,6 @@ define(['butterfly/view'], function(View){
       this.routedOnce = false;
     },
 
-    onLoad: function(){
-      if (this.subviews.length != 1) throw new Error("should have only one subview in this case :(");
-      this.stack.push({path: null, view: this.subviews[0]});
-      Butterfly.log('StackView: init first route');
-    },
-
     onShow: function(options){
       var currentView = this.stack[this.stack.length -1].view;
       currentView.show(options);
@@ -36,6 +30,8 @@ define(['butterfly/view'], function(View){
         'width': '100%',
         'z-index': this.baseZIndex++
       });
+
+      this.stack.push({path: null, view: this.subviews[0]});
     },
 
     route: function(paths, options){

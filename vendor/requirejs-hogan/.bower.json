@@ -1,0 +1,18 @@
+{
+  "name": "requirejs-hogan",
+  "version": "0.0.1",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/webpro/requirejs-hogan"
+  },
+  "homepage": "https://github.com/webpro/requirejs-hogan",
+  "_release": "0.0.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "0.0.1",
+    "commit": "ccf3f68b75dd41e0c368a18da9a3b09cda610c7b"
+  },
+  "_source": "git://github.com/webpro/requirejs-hogan.git",
+  "_target": "*",
+  "_originalSource": "requirejs-hogan"
+}

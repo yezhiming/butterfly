@@ -1,15 +1,15 @@
 (function(root, factory) {
 
 	if (typeof define === 'function' && define.amd) {
-		define(['exports', 'underscore', 'jquery', 'backbone'], function(exports, _, $, Backbone){
-			root.Butterfly = factory(root, exports, _, $, Backbone);
+		define(['exports', 'underscore', 'jquery', 'backbone', 'view'], function(exports, _, $, Backbone, ViewPlugin){
+			root.Butterfly = factory(root, exports, _, $, Backbone, ViewPlugin);
 		});
 
 	} else {
 		root.Butterfly = factory(root, {}, root._, (root.jQuery || root.Zepto || root.ender || root.$), Backbone);
 	}
 
-})(this, function(root, Butterfly, _, $, Backbone){
+})(this, function(root, Butterfly, _, $, Backbone, ViewPlugin){
 
 	String.prototype.endsWith = function(suffix) {
     return this.indexOf(suffix, this.length - suffix.length) !== -1;
@@ -46,39 +46,6 @@
   	console.log.apply(console, arguments);
   }
 
-	//加载元素
-	Butterfly.loadView = function(el, success, fail){
-		//el的绑定类，若没有，默认为最普通的View（框架定义的）
-		var elementBinding = (el.getAttribute('data-window') || el.getAttribute('data-view') || '$view').replace('$', 'butterfly/');
-		//加载el的绑定类
-		require([elementBinding], function(TopViewClass){
-			var topView = new TopViewClass({el: el});
-
-			//el子节点的绑定类集合
-			var el_view_bindings = el.querySelectorAll('[data-view]');
-
-			var view_names = _.map(el_view_bindings, function(node){
-				return node.getAttribute('data-view').replace('$', 'butterfly/');
-			});
-
-			if (view_names.length == 0) {
-				if (success) success(topView);
-
-			} else {
-				require(view_names, function(){
-					_.each(arguments, function(ViewClass, index){
-						var view = new ViewClass({el: el_view_bindings[index]});
-						topView.addSubview(view);
-					});
-					topView.onLoad();
-					if (success) success(topView);
-				}, fail);
-			}
-
-		}, fail);
-
-	}//loadView
-
   // Butterfly.Router
   // ---------------
   //
@@ -96,17 +63,6 @@
 	});
 
   Butterfly.history = Backbone.history;
-
-	Butterfly.navigate = function(fragment, options){
-		deprecated('please use window.butterfly.navigate() instead.');
-		//default options
-		options = options || {trigger: true};
-		//default trigger
-		options.trigger = (options.trigger == undefined) ? true : options.trigger;
-		//pass params
-		// this.router.routingOptions = options;
-		Backbone.history.navigate(fragment, options);
-	}
 
   // Butterfly.Application
   // ---------------
@@ -135,7 +91,7 @@
 		fly: function(){
 
 			var me = this;
-	    this.scanWindow(function(view){
+	    this.scanRootView(function(view){
 
 	    	me.router = new Butterfly.Router();
 
@@ -145,6 +101,7 @@
 				Backbone.history.start({pushState: false, root: rootPath});
 
 				//invoke the window onShow
+				view.render();
 				view.show();
 
 	    }, function(err){
@@ -154,15 +111,17 @@
 			});
 		},
 
-		scanWindow: function(success, fail){
+		scanRootView: function(success, fail){
 			var me = this;
 
-			var mainWindow = document.querySelector('[data-window]');
-			if (!mainWindow) {
-				throw new Error('window not found');
+			var rootView = document.querySelector('[data-view]');
+			if (!rootView) {
+				throw new Error('root view not found');
 			}
 
-			Butterfly.loadView(mainWindow, function(view){
+			ViewPlugin.loadView(rootView, function(View){
+
+				var view = new View();
 
 				me.window = view;
 				success(view);
