@@ -109,12 +109,14 @@
 				console.error("loadView:[%s] fail: %s", el, err);
 				throw err;
 			});
+
+			return this;
 		},
 
 		scanRootView: function(success, fail){
 			var me = this;
 
-			var rootView = document.querySelector('[data-view]');
+			var rootView = this.el.querySelector('[data-view]');
 			if (!rootView) {
 				throw new Error('root view not found');
 			}
@@ -131,16 +133,8 @@
 
 	});
 
-	Butterfly.ready = function(callback){
-    if (/complete|loaded|interactive/.test(document.readyState) && document.body) callback()
-    else document.addEventListener('DOMContentLoaded', function(){ callback() }, false)
-    return this;
-  }
-
-	Butterfly.ready(function(){
-		var app = new Butterfly.Application(document.body);
-		root.butterfly = app;
-		app.fly();
+	$(function(){
+		root.butterfly = new Butterfly.Application(document.body).fly();
 	});
 
 	return Butterfly;
