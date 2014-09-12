@@ -11,7 +11,6 @@ require.config({
 		domReady: 'butterfly/vendor/requirejs-domready/domready',
 		i18n: 'butterfly/vendor/requirejs-i18n/i18n',
 		css: 'butterfly/vendor/require-css/css',
-		link: 'butterfly/vendor/require-link/link',
 		view: 'butterfly/js/requirejs-butterfly',
 		// lib
 		jquery: 'butterfly/vendor/jquery/jquery',
@@ -20,7 +19,10 @@ require.config({
 		fastclick: 'butterfly/vendor/fastclick/fastclick',
 		iscroll: 'butterfly/vendor/iscroll/iscroll-probe',
 		moment: 'butterfly/vendor/moment/moment',
-		spin: 'butterfly/vendor/spinjs/spin'
+		spin: 'butterfly/vendor/spinjs/spin',
+		// hogan
+		hogan: 'butterfly/vendor/requirejs-hogan-plugin/hogan',
+		hgn: 'butterfly/vendor/requirejs-hogan-plugin/hgn'
 	},
 	waitSeconds: 5,
 	shim: {

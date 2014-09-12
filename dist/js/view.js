@@ -5,6 +5,7 @@ define(['backbone'], function(Backbone){
 
 	var View =  Backbone.View.extend({
 
+		//default event
 		events: {
 			"click a[data-action='back']": "goBack"
 		},
@@ -23,6 +24,11 @@ define(['backbone'], function(Backbone){
 			_.each(this.subviews, function(subview){
 				subview.remove();
 			});
+		},
+
+		//find a subview
+		find: function(selector){
+
 		},
 
 		addSubview: function(view){

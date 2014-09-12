@@ -1,5 +1,6 @@
 define(['backbone', 'spin'], function(Backbone, Spinner){
 
+	
 	return Backbone.View.extend({
 
 		className: 'notification',
@@ -34,7 +35,7 @@ define(['backbone', 'spin'], function(Backbone, Spinner){
 			if (this.timeout) {
 				clearTimeout(this.timeout);
 			};
-			
+
 			if (this.spinner) this.spinner.stop();
 
 			Backbone.View.prototype.remove.call(this, arguments);

@@ -11,7 +11,6 @@ require.config({
 		domReady: 'butterfly/vendor/requirejs-domready/domready',
 		i18n: 'butterfly/vendor/requirejs-i18n/i18n',
 		css: 'butterfly/vendor/require-css/css',
-		link: 'butterfly/vendor/require-link/link',
 		view: 'butterfly/js/requirejs-butterfly',
 		// lib
 		jquery: 'butterfly/vendor/jquery/jquery',
@@ -20,7 +19,10 @@ require.config({
 		fastclick: 'butterfly/vendor/fastclick/fastclick',
 		iscroll: 'butterfly/vendor/iscroll/iscroll-probe',
 		moment: 'butterfly/vendor/moment/moment',
-		spin: 'butterfly/vendor/spinjs/spin'
+		spin: 'butterfly/vendor/spinjs/spin',
+		// hogan
+		hogan: 'butterfly/vendor/requirejs-hogan-plugin/hogan',
+		hgn: 'butterfly/vendor/requirejs-hogan-plugin/hgn'
 	},
 	waitSeconds: 5,
 	shim: {
@@ -35,7 +37,7 @@ require.config({
 	}
 });
 
-require(['butterfly', 'iscroll', 'fastclick'],
+require(['butterfly', 'iscroll', 'butterfly/fastclick'],
 	function(Butterfly, IScroll, FastClick){
 
 		//ios7 issue fix
@@ -44,6 +46,7 @@ require(['butterfly', 'iscroll', 'fastclick'],
 		}
 		//iOS scroll to top
 		setTimeout(function() {window.scrollTo(0, 1);}, 0);
+
 
 		//enable fastclick
 		FastClick.attach(document.body);

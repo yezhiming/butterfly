@@ -106,7 +106,7 @@
 
 	    }, function(err){
 
-				console.error("loadView:[%s] fail: %s", el, err);
+				console.error("fail to load root view: %s", err);
 				throw err;
 			});
 
