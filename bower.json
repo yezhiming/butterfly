@@ -28,6 +28,7 @@
     "fastclick": "*",
     "iscroll": "*",
     "jquery": "*",
+    "zepto": "*",
     "underscore": "*",
     "backbone": "*",
     "moment": "*",
