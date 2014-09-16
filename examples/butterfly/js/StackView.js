@@ -16,6 +16,12 @@ define(['butterfly/view'], function(View){
       this.routedOnce = false;
     },
 
+    render: function(){
+      _.each(this.stack, function(view){
+        view.render();
+      });
+    },
+
     onShow: function(options){
       var currentView = this.stack[this.stack.length -1].view;
       currentView.show(options);
