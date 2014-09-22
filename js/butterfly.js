@@ -93,6 +93,8 @@
 			var me = this;
 	    this.scanRootView(function(view){
 
+				me.rootView = view;
+
 	    	me.router = new Butterfly.Router();
 
 	    	var pathname = window.location.pathname;
@@ -125,7 +127,6 @@
 
 				var view = new View();
 
-				me.window = view;
 				success(view);
 
 			}, fail);
