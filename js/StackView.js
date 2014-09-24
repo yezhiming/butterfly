@@ -22,6 +22,7 @@ define(['butterfly/view'], function(View){
       });
     },
 
+    //pass on the 'onShow' event to the top subview
     onShow: function(options){
       var currentView = this.stack[this.stack.length -1].view;
       currentView.show(options);
@@ -37,7 +38,7 @@ define(['butterfly/view'], function(View){
         'z-index': this.baseZIndex++
       });
 
-      this.stack.push({path: null, view: this.subviews[0]});
+      this.stack.push({path: "", view: this.subviews[0]});
     },
 
     route: function(paths, options){
@@ -49,7 +50,7 @@ define(['butterfly/view'], function(View){
       }
 
       // check is this route is intent to go back
-      var goingBack = this.stack.length >= 2 && (this.stack[this.stack.length - 2].path == paths);
+      var goingBack = this.stack.length >= 2 && (this.stack[this.stack.length - 2].path == window.location.hash);
       // 2 top views in the stack
       var currentView = this.stack[this.stack.length -1].view;
       var nextView = this.stack.length >= 2 ? this.stack[this.stack.length -2].view : null;
@@ -98,7 +99,7 @@ define(['butterfly/view'], function(View){
             newView.animateSlideInRight();
           }
 
-          me.stack.push({path: paths, view: newView});
+          me.stack.push({path: window.location.hash, view: newView});
 
           me.routedOnce = true;
         }, function(err){
