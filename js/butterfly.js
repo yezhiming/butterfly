@@ -84,7 +84,7 @@
 		},
 
 		route: function(path, options){
-			if (this.window.route) this.window.route(path, options);
+			if (this.rootView.route) this.rootView.route(path, options);
 		},
 
 		//launch application
@@ -101,8 +101,7 @@
 				var rootPath = pathname.substr(0, pathname.lastIndexOf('/'));
 				Butterfly.log("start history with root: %s", rootPath);
 				Backbone.history.start({pushState: false, root: rootPath});
-
-				//invoke the window onShow
+				
 				view.render();
 				view.show();
 
