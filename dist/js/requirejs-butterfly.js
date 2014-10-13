@@ -8,28 +8,28 @@ define([], function () {
 	}
 
   //获取el的绑定，以及绑定语法糖的逻辑
-  function getBinding(el, contextPath){
-    var bindingName = el.getAttribute('data-window') || el.getAttribute('data-view');
-    bindingName = bindingName != null ? bindingName : '$view';
+  function getBinding(el, require_name){
+    var bindingName = el.getAttribute('data-view');
 
     //patch for '$'
-    bindingName = bindingName.replace('$', 'butterfly/')
+    if (bindingName) {
+      bindingName = bindingName.replace('$', 'butterfly/')
+    }
 
     //patch for '.' and empty value
     //如果写data-view，但无值，则默认使用与此html同名的js文件，例如member/login.html，则使用member/login.js
-    //当然，需要提供contextPath，这个patch才有效
-    if (contextPath){
-      bindingName = (bindingName == '.' || bindingName == '') ? contextPath.replace('.html', '') : bindingName;
+    if (bindingName == '.' || bindingName == '') {
+      bindingName = require_name.replace('.html', '');
     }
 
     return bindingName;
   }
 
   //获取el及其子节点的绑定
-  function getBindingAll(el, contextPath){
+  function getBindingAll(el, require_name){
 
     //el的绑定类，若没有，默认为最普通的View（框架定义的）
-    var elementBinding = getBinding(el, contextPath);
+    var elementBinding = getBinding(el, require_name) || 'butterfly/view';
 
     //el子节点的绑定类集合
     var el_view_bindings = el.querySelectorAll('[data-view]');
@@ -41,7 +41,7 @@ define([], function () {
     return view_names;
   }
 
-  var createProxyViewClass = function(ViewClass, el, htmlTemplate){
+  var createProxyViewClass = function(ViewClass, el, htmlTemplate, require_name){
 
     return ViewClass.extend({
 
@@ -70,26 +70,37 @@ define([], function () {
       },
 
       applyBinding: function(){
-        //apply binding
+
         var me = this;
-        _.chain(_.result(this, 'el').querySelectorAll('[data-view]'))
-        .foldl(function(mapping, node){
-          var binding = node.getAttribute('data-view').replace('$', 'butterfly/');
-          if (binding && binding.length > 0) mapping[binding] = node;
-          return mapping;
-        }, {})
-        .each(function(node, bindingName){
+        _.each(this.el.children, function(child){
+            me.travel(child, me);
+        });
+      },
+
+      travel: function(el, superview){
+
+        var bindingName = getBinding(el);
+
+        if (bindingName) {
           var ViewClass = require(bindingName);
-          //TODO: inject parent
-          var view = new ViewClass({el: node});
-          me.addSubview(view);
+          var view = new ViewClass({el: el});
+
+          //建立父子关系
+          view.superview = superview;
+          superview.addSubview(view);
+        }
+
+        var me = this;
+        _.each(el.children, function(child){
+            me.travel(child, view || superview);
         });
       }
     });
   }
 
   //TODO: 如果该html页面页面有两个根节点，例如div.header div.content，则自动创建一个包裹div，并自动赋予id
-	var loadViewClassByEL = function(require, view, htmlTemplate, success, fail){
+  //name: require.js interal name follow by 'butterfly!'
+	var loadViewClassByEL = function(require, name, htmlTemplate, success, fail){
 		//只要body内的类容
     //TODO: 目前带上了body标签，改为只要里面的东西
 		htmlTemplate = (/<html/i.test(htmlTemplate)) ? htmlTemplate.match(/<body[^>]*>([\s\S.]*)<\/body>/i)[0] : htmlTemplate;
@@ -99,32 +110,32 @@ define([], function () {
 		el = el.childElementCount == 1 ? el.firstElementChild : el;
 
 		//加载el以及el的子节点的所有绑定类
-		require(getBindingAll(el, view), function(){
+		require(getBindingAll(el, name), function(){
 
 			var TopViewClass = arguments[0];
 
       //由于require.js的加载机制，如果有两个地方用到这个View，那么其实是同一个实例，el也是同一个，所以会互相影响
       //这里采取的方法是，只保存htmlTemplate，以字符串形式，在View创建实例时，才转化成DOM对象
       //when this proxy class initialize called, the html element will assign to el
-			var ProxyViewClass = createProxyViewClass(TopViewClass, null, htmlTemplate);
+			var ProxyViewClass = createProxyViewClass(TopViewClass, null, htmlTemplate, name);
 
 			success(ProxyViewClass);
 
 		}, fail);
 	}
 
-	var loadViewClass = function(require, view, success, fail){
+	var loadViewClass = function(require, name, success, fail){
 
-		console.log('loadView: %s', view);
+		console.log('loadView: %s', name);
 
-		if (typeof view == 'string' && view.endsWith('html')) {
+		if (typeof name == 'string' && name.endsWith('html')) {
 
-			require(['text!'+view], function(template){
-				loadViewClassByEL(require, view, template, success, fail);
+			require(['text!'+name], function(template){
+				loadViewClassByEL(require, name, template, success, fail);
 			}, fail);
 
-		} else if (typeof view == 'string') {
-			require([view], success, fail);
+		} else if (typeof name == 'string') {
+			require([name], success, fail);
 
 		} else {
 			throw new Error('view loader plugin require a view name of string type');
