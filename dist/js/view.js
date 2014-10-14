@@ -14,13 +14,19 @@ define(['backbone'], function(Backbone){
 			window.history.back();
 		},
 
-		initialize: function(options){
+		//add superview & subviews property
+		constructor: function(options){
+			if(options)this.superview = options.superview;
 			this.subviews = [];
+
+			Backbone.View.apply(this, arguments);
 		},
 
+		//remove superview & subviews reference
 		remove: function(){
 			Backbone.View.prototype.remove.call(this);
 
+			this.superview = null;
 			_.each(this.subviews, function(subview){
 				subview.remove();
 			});
@@ -35,14 +41,8 @@ define(['backbone'], function(Backbone){
 			this.subviews.push(view);
 		},
 
-		setElement: function(element, delegate){
-			Backbone.View.prototype.setElement.call(this, element, delegate);
-		},
-
-
-
 		render: function(){
-			Backbone.View.prototype.render.call(this, arguments);
+			Backbone.View.prototype.render.apply(this, arguments);
 			return this;
 		},
 

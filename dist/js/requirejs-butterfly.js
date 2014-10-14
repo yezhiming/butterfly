@@ -51,6 +51,8 @@ define([], function () {
 
       constructor: function(){
 
+        ViewClass.apply(this, arguments);
+
         if (this._targetElement) {
           this.el = this._targetElement;
 
@@ -83,10 +85,8 @@ define([], function () {
 
         if (bindingName) {
           var ViewClass = require(bindingName);
-          var view = new ViewClass({el: el});
+          var view = new ViewClass({el: el, superview: superview});
 
-          //建立父子关系
-          view.superview = superview;
           superview.addSubview(view);
         }
 

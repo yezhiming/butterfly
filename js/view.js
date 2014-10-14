@@ -5,6 +5,7 @@ define(['backbone'], function(Backbone){
 
 	var View =  Backbone.View.extend({
 
+		//default event
 		events: {
 			"click a[data-action='back']": "goBack"
 		},
@@ -13,30 +14,35 @@ define(['backbone'], function(Backbone){
 			window.history.back();
 		},
 
-		initialize: function(options){
+		//add superview & subviews property
+		constructor: function(options){
+			if(options)this.superview = options.superview;
 			this.subviews = [];
+
+			Backbone.View.apply(this, arguments);
 		},
 
+		//remove superview & subviews reference
 		remove: function(){
 			Backbone.View.prototype.remove.call(this);
 
+			this.superview = null;
 			_.each(this.subviews, function(subview){
 				subview.remove();
 			});
+		},
+
+		//find a subview
+		find: function(selector){
+
 		},
 
 		addSubview: function(view){
 			this.subviews.push(view);
 		},
 
-		setElement: function(element, delegate){
-			Backbone.View.prototype.setElement.call(this, element, delegate);
-		},
-
-
-
 		render: function(){
-			Backbone.View.prototype.render.call(this, arguments);
+			Backbone.View.prototype.render.apply(this, arguments);
 			return this;
 		},
 
@@ -52,22 +58,22 @@ define(['backbone'], function(Backbone){
 		//events
 		onShow: function(){
 			$(window).on('orientationchange', this.onOrientationchange);
-      $(window).on('resize', this.onWindowResize);
-      $(window).on('scroll', this.onWindowScroll);
+			$(window).on('resize', this.onWindowResize);
+			$(window).on('scroll', this.onWindowScroll);
 		},
 		onHide: function(){
 			$(window).off('orientationchange', this.onOrientationchange);
-      $(window).off('resize', this.onWindowResize);
-      $(window).off('scroll', this.onWindowScroll);
+			$(window).off('resize', this.onWindowResize);
+			$(window).off('scroll', this.onWindowScroll);
 		},
 
 		onOrientationchange: function() {
-        this.$('input').blur();
-    },
+				this.$('input').blur();
+		},
 
 		onWindowScroll: function() {},
 
-    onWindowResize: function() {},
+		onWindowResize: function() {},
 
 		route: function(){}
 	});
