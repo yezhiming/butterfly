@@ -34,8 +34,25 @@
           <h1 class="title">Tasks</h1>
         </header>
         <div class="content">
-          <ul class="table-view">
-          </ul>
+
+          <!-- Bind to ListView Component-->
+          <!-- 使用表达式，或注册实例ID（全局），extend的时候给一个ID？new一个的时候给一个ID？-->
+          <div data-view="listview"
+               data-collection="{superview.tasks}"
+               data-itemTemplate="$('#cell-template')">
+            <div class="scroller">
+              <ul class="table-view">
+
+              </ul>
+              <button class="loadmore visible btn btn-block btn-outlined">
+                <div class="label">加载更多</div>
+                <span class="icon"></span>
+              </button>
+            </div>
+          </div>
+
+          <div data-view="$view"/>
+
         </div>
       </div>
 
