@@ -1,4 +1,4 @@
-# Overview
+# 框架概述（Overview）
 
 ## 基础知识
 
@@ -119,7 +119,7 @@ root
 ┃┗view22
 ┗view3
 ```
-应用的用户界面，就是由View及容器（其实也是View）组合而成。呈树形结构，根节点称为rootView。可以通过butterfly.rootView访问。
+应用的用户界面，就是由View及容器（其实是View的子类）组合而成。呈树形结构，根节点称为rootView。可以通过butterfly.rootView访问。
 
 ### 视图管理及容器
 Butterfly.js作为一个单页架构的前端框架，对视图的管理显得尤为重要，Butterfly.js中，由容器担负这个职责。
