@@ -8,7 +8,7 @@ require.config({
 	paths: {
 		// require.js plugins
 		text: 'butterfly/vendor/requirejs-text/text',
-		domReady: 'butterfly/vendor/requirejs-domready/domready',
+		domReady: 'butterfly/vendor/requirejs-domready/domReady',
 		i18n: 'butterfly/vendor/requirejs-i18n/i18n',
 		css: 'butterfly/vendor/require-css/css',
 		view: 'butterfly/js/requirejs-butterfly',
@@ -37,8 +37,8 @@ require.config({
 	}
 });
 
-require(['butterfly', 'iscroll', 'butterfly/fastclick'],
-	function(Butterfly, IScroll, FastClick){
+require(['domReady!', 'butterfly', 'iscroll', 'butterfly/fastclick'],
+	function(domReady, Butterfly, IScroll, FastClick){
 
 		//ios7 issue fix
 		if (navigator.userAgent.match(/iPad;.*CPU.*OS 7_\d/i)) {
