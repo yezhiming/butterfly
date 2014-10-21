@@ -84,7 +84,7 @@
 		},
 
 		route: function(path, options){
-			if (this.window.route) this.window.route(path, options);
+			if (this.rootView.route) this.rootView.route(path, options);
 		},
 
 		//launch application
@@ -93,14 +93,15 @@
 			var me = this;
 	    this.scanRootView(function(view){
 
+				me.rootView = view;
+
 	    	me.router = new Butterfly.Router();
 
 	    	var pathname = window.location.pathname;
 				var rootPath = pathname.substr(0, pathname.lastIndexOf('/'));
 				Butterfly.log("start history with root: %s", rootPath);
 				Backbone.history.start({pushState: false, root: rootPath});
-
-				//invoke the window onShow
+				
 				view.render();
 				view.show();
 
@@ -125,7 +126,6 @@
 
 				var view = new View();
 
-				me.window = view;
 				success(view);
 
 			}, fail);

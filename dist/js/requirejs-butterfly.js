@@ -1,11 +1,11 @@
 define([], function () {
   'use strict';
 
-	if (typeof String.prototype.endsWith !== 'function') {
+  if (typeof String.prototype.endsWith !== 'function') {
     String.prototype.endsWith = function(suffix) {
         return this.indexOf(suffix, this.length - suffix.length) !== -1;
     };
-	}
+  }
 
   //获取el的绑定，以及绑定语法糖的逻辑
   function getBinding(el, require_name){
@@ -100,58 +100,58 @@ define([], function () {
 
   //TODO: 如果该html页面页面有两个根节点，例如div.header div.content，则自动创建一个包裹div，并自动赋予id
   //name: require.js interal name follow by 'butterfly!'
-	var loadViewClassByEL = function(require, name, htmlTemplate, success, fail){
-		//只要body内的类容
+  var loadViewClassByEL = function(require, name, htmlTemplate, success, fail){
+    //只要body内的类容
     //TODO: 目前带上了body标签，改为只要里面的东西
-		htmlTemplate = (/<html/i.test(htmlTemplate)) ? htmlTemplate.match(/<body[^>]*>([\s\S.]*)<\/body>/i)[0] : htmlTemplate;
-		//转换成DOM
-		var el = document.createElement('div');
-		el.innerHTML = htmlTemplate;
-		el = el.childElementCount == 1 ? el.firstElementChild : el;
+    htmlTemplate = (/<html/i.test(htmlTemplate)) ? htmlTemplate.match(/<body[^>]*>([\s\S.]*)<\/body>/i)[0] : htmlTemplate;
+    //转换成DOM
+    var el = document.createElement('div');
+    el.innerHTML = htmlTemplate;
+    el = el.childElementCount == 1 ? el.firstElementChild : el;
 
-		//加载el以及el的子节点的所有绑定类
-		require(getBindingAll(el, name), function(){
+    //加载el以及el的子节点的所有绑定类
+    require(getBindingAll(el, name), function(){
 
-			var TopViewClass = arguments[0];
+      var TopViewClass = arguments[0];
 
       //由于require.js的加载机制，如果有两个地方用到这个View，那么其实是同一个实例，el也是同一个，所以会互相影响
       //这里采取的方法是，只保存htmlTemplate，以字符串形式，在View创建实例时，才转化成DOM对象
       //when this proxy class initialize called, the html element will assign to el
-			var ProxyViewClass = createProxyViewClass(TopViewClass, null, htmlTemplate, name);
+      var ProxyViewClass = createProxyViewClass(TopViewClass, null, htmlTemplate, name);
 
-			success(ProxyViewClass);
+      success(ProxyViewClass);
 
-		}, fail);
-	}
+    }, fail);
+  }
 
-	var loadViewClass = function(require, name, success, fail){
+  var loadViewClass = function(require, name, success, fail){
 
-		console.log('loadView: %s', name);
+    console.log('loadView: %s', name);
 
-		if (typeof name == 'string' && name.endsWith('html')) {
+    if (typeof name == 'string' && name.endsWith('html')) {
 
-			require(['text!'+name], function(template){
-				loadViewClassByEL(require, name, template, success, fail);
-			}, fail);
+      require(['text!'+name], function(template){
+        loadViewClassByEL(require, name, template, success, fail);
+      }, fail);
 
-		} else if (typeof name == 'string') {
-			require([name], success, fail);
+    } else if (typeof name == 'string') {
+      require([name], success, fail);
 
-		} else {
-			throw new Error('view loader plugin require a view name of string type');
-		}
-	}
+    } else {
+      throw new Error('view loader plugin require a view name of string type');
+    }
+  }
 
   var plugin = {
-  	load: function(name, req, onLoad, config){
-  		loadViewClass(req, name, function(View){
-  			onLoad(View);
+    load: function(name, req, onLoad, config){
+      loadViewClass(req, name, function(View){
+        onLoad(View);
 
-  		}, function(err){
-  			onLoad.error(err);
+      }, function(err){
+        onLoad.error(err);
 
-  		});
-  	},
+      });
+    },
 
     //for non-AMD usage
     getBinding: getBinding,
