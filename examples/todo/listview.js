@@ -13,34 +13,33 @@ define(['butterfly/view'], function(View){
 
       View.prototype.initialize.apply(this, arguments);
 
-      var optionsInUpperCase = _.map(listviewOptions, function(opt){
-        return opt.toUpperCase();
-      });
-
       var me = this;
-      //pick from el first
-      var opts = _.chain(this.el.attributes)
-      //
-      .filter(function(attr){
-        //remove 'data-' initial and uppercase to attribute name
-        return optionsInUpperCase.indexOf(attr.name.substr(5).toUpperCase()) != -1;
-      })
-      //turn every attribute into [name, value] array
-      .map(function(attr){
-        return [attr.name.substr(5), attr.value];
+
+      var opts = _.chain(listviewOptions)
+
+      //get attribute value, [name, value] array
+      .map(function(option){
+        return [option, me.el.getAttribute('data-' + option)];
       })
       //turn [[name, value], [name, value], ...] array to object
       .object()
+
       //override by options
       .defaults(_.pick(options, listviewOptions))
+
       //eval
-      .map(function(opt){
-        return me.evaluate(opt);
+      .map(function(value, key){
+        return [key, me.evaluate(value)];
       })
+      .object()
+
       //get final value
       .value();
+
+      
     },
 
+    //evaluate option value, either a string or an expression
     evaluate: function(opt){
       if (typeof opt == 'string' && opt.match(/\{.*\}/)) {
 
