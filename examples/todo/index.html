@@ -21,6 +21,12 @@
 </head>
 <body>
 
+    <script id="cell-template" type="text/x-template">
+      <li class="table-view-cell">
+        <%= name %>
+      </li>
+    </script>
+
     <div id="main" data-view="$StackView">
 
       <div id="main-page" data-view="index">
@@ -34,13 +40,8 @@
           <div data-view="listview"
                data-collection="{superview.tasks}"
                data-itemTemplate="#cell-template"
+               data-iscroll="true"
                data-autoLoad="true">
-
-            <script id="cell-template" type="text/x-template">
-              <li class="table-view-cell">
-                <%= name %>
-              </li>
-            </script>
 
             <div class="scroller">
               <ul class="table-view">
@@ -51,8 +52,10 @@
                 <span class="icon"></span>
               </button>
             </div>
+
           </div>
 
+          <!-- useless, for demo validation -->
           <div data-view="$view"/>
 
         </div>

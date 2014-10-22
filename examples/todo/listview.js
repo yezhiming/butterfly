@@ -7,6 +7,11 @@ define([
   ], function($, _, View, TplItem, IScroll){
 
   //desired options
+  //itemTemplate supports:
+  //1. inside jQuery/Zepto object, using expression {$('#id')}
+  //2. global jQuery/Zepto object, using expression {window.$('#id')}
+  //2. DOM object, using expression {document.querySelector('#id')}
+  //3. literal selector '#id', using plan string
   var listviewOptions = ['autoLoad', 'collection', 'itemTemplate', 'itemClass', 'pageSize', 'iscroll'];
 
   return View.extend({
@@ -37,7 +42,7 @@ define([
         }
         //convert literal selector to text
         else if (typeof this.itemTemplate == 'string' && this.itemTemplate[0] == '#') {
-          this.itemTemplate = this.$(this.itemTemplate).html();
+          this.itemTemplate = $(this.itemTemplate).html();
         }
 
         //compile to underscore template
@@ -51,7 +56,7 @@ define([
 
 
       if (this.iscroll) {
-        me.IScroll = new IScroll(this.el, {
+        this.IScroll = new IScroll(this.el, {
           probeType: 2,
           scrollX: false,
           scrollY: true,
