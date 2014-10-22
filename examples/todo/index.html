@@ -21,12 +21,6 @@
 </head>
 <body>
 
-    <script id="cell-template" type="text/x-template">
-      <li class="table-view-cell">
-        <%= name %>
-      </li>
-    </script>
-
     <div id="main" data-view="$StackView">
 
       <div id="main-page" data-view="index">
@@ -39,7 +33,15 @@
           <!-- 使用表达式，或注册实例ID（全局），extend的时候给一个ID？new一个的时候给一个ID？-->
           <div data-view="listview"
                data-collection="{superview.tasks}"
-               data-itemTemplate="#cell-template">
+               data-itemTemplate="#cell-template"
+               data-autoLoad="true">
+
+            <script id="cell-template" type="text/x-template">
+              <li class="table-view-cell">
+                <%= name %>
+              </li>
+            </script>
+
             <div class="scroller">
               <ul class="table-view">
 

@@ -14,20 +14,12 @@ define([
 		render: function(){
 			console.log('todo index view render');
 
-			var tasks = this.tasks = new Tasks();
-			tasks.on('add', function(model, collection, options){
-				console.log('add');
-			});
-			tasks.on('remove', function(){
-
-			});
-
-			tasks.fetch({
-				remove: false,
-				success: this.onLoad,
-				error: this.onError,
-				data: {page: 1, pageSize: 4}
-			});
+			// this.tasks.fetch({
+			// 	remove: false,
+			// 	success: this.onLoad,
+			// 	error: this.onError,
+			// 	data: {page: 1, pageSize: 4}
+			// });
 		},
 
 		reload: function(){
