@@ -127,8 +127,12 @@ define([
         console.log('change');
       });
 
-      this.listenTo(collection, 'reset', function(model, collection, options){
+      this.listenTo(collection, 'reset', function(collection, options){
         console.log('reset');
+
+        _.each(collection.models, function(model){
+          me.addItem(model);
+        });
       });
     },
 
@@ -167,6 +171,12 @@ define([
     },
 
     addItem: function(item){
+
+      //convert backbone model to object
+      if (item instanceof Backbone.Model) item = item.toJSON();
+      //convert object to Item
+      if ($.isPlainObject(item))  item = new this.itemClass({data: item});
+
       this.subviews.push(item);
       this.el.querySelector("ul").appendChild(item.el);
     }

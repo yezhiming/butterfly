@@ -16,7 +16,7 @@ define(['backbone'], function(Backbone){
     },
 
     search: function(options){
-
+      
     },
 
     //
@@ -40,7 +40,7 @@ define(['backbone'], function(Backbone){
     fetchNextPage: function(){
       this.fetchPage(++this.page);
     },
-    
+
     onLoad: function(collection, response, options){
       console.log('on load');
     },
