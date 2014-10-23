@@ -33,8 +33,20 @@ define(['backbone'], function(Backbone){
 		},
 
 		//find a subview
-		find: function(selector){
+		//Breadth First Search
+		find: function(id){
+			var result = _.find(this.subviews, function(subview){
+				return subview.el.id == id;
+			});
 
+			if (!result) {
+				var container = _.find(this.subviews, function(subview){
+					return subview.find(id);
+				});
+				result = container.find(id);
+			}
+
+			return result;
 		},
 
 		addSubview: function(view){
