@@ -12,7 +12,7 @@ define([
   //2. global jQuery/Zepto object, using expression {window.$('#id')}
   //2. DOM object, using expression {document.querySelector('#id')}
   //3. literal selector '#id', using plan string
-  var listviewOptions = ['autoLoad', 'collection', 'itemTemplate', 'itemClass', 'pageSize', 'iscroll'];
+  var listviewOptions = ['collection', 'itemTemplate', 'itemClass', 'pageSize', 'iscroll'];
 
   return View.extend({
     events: {
@@ -55,7 +55,7 @@ define([
       }
 
 
-      if (this.iscroll) {
+      if (this.iscroll == 'true') {
         this.IScroll = new IScroll(this.el, {
           probeType: 2,
           scrollX: false,
@@ -65,10 +65,6 @@ define([
       }
 
       this.bindCollectionEvents(this.collection);
-
-      if (this.autoLoad) {
-        this.reloadData();
-      }
     },
 
     parseOptions: function(options, desiredOptions){
@@ -119,6 +115,8 @@ define([
 
         var item = new me.itemClass({data: model.toJSON()});
         me.addItem(item);
+
+        me.refresh();
       });
 
       this.listenTo(collection, 'remove', function(model, collection, options){
@@ -138,18 +136,21 @@ define([
     // ListView API
     //
     refresh: function(){
-      var me = this;
-      setTimeout(function() {
-        me.IScroll.refresh();
-      }, 0);
+      if (this.IScroll){
+        var me = this;
+        setTimeout(function() {
+          me.IScroll.refresh();
+        }, 0);
+      }
     },
 
     //
     // ListView Evnets
     //
     onLoadMore: function(event) {
-      var me = this;
       var loadmoreButton = event.currentTarget;
+
+      this.trigger('loadmore', this, event);
     },
 
     //选择了某一行
@@ -165,31 +166,9 @@ define([
       }
     },
 
-    //
-    // ListView Data API
-    //
-    reloadData: function(){
-      console.log('listview.reloadData');
-
-      this.collection.fetch({
-        remove: false,
-        success: this.onLoad,
-        error: this.onError,
-        data: {page: 1, pageSize: 4}
-      });
-    },
-
     addItem: function(item){
       this.subviews.push(item);
       this.el.querySelector("ul").appendChild(item.el);
-    },
-
-    onLoad: function(collection, response, options){
-      console.log('on load');
-    },
-
-    onError: function(collection, response, options){
-      console.log('on error');
     }
   });
 });

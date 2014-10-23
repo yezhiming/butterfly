@@ -22,9 +22,7 @@
 <body>
 
     <script id="cell-template" type="text/x-template">
-      <li class="table-view-cell">
         <%= name %>
-      </li>
     </script>
 
     <div id="main" data-view="$StackView">
@@ -38,11 +36,11 @@
 
           <!-- Bind to ListView Component-->
           <!-- 使用表达式，或注册实例ID（全局），extend的时候给一个ID？new一个的时候给一个ID？-->
-          <div data-view="listview"
+          <div id="todo-list"
+               data-view="listview"
                data-collection="{superview.tasks}"
                data-itemTemplate="#cell-template"
-               data-iscroll="true"
-               data-autoLoad="true">
+               data-iscroll="false">
 
             <div class="scroller">
               <ul class="table-view">

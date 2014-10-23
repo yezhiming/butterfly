@@ -7,6 +7,10 @@ define([
 
 	return View.extend({
 
+		events: {
+			"click #refresh": "onRefresh"
+		},
+
 		initialize: function(){
 			this.tasks = new Tasks();
 		},
@@ -20,27 +24,21 @@ define([
 			// 	error: this.onError,
 			// 	data: {page: 1, pageSize: 4}
 			// });
+
+			var listview = this.find('todo-list');
+			this.listenTo(listview, 'loadmore', this.onLoadmore);
+
+			this.tasks.fetchFirstPage();
 		},
 
-		reload: function(){
-			tasks.fetch({
-				remove: false,
-				success: this.onLoad,
-				error: this.onError,
-				data: {page: 0, pageSize: 4}
-			});
+		onRefresh: function(){
+			console.log('todo/index refresh');
+
+			this.tasks.fetchFirstPage();
 		},
 
-		onLoad: function(collection, response, options){
-			console.log('on load');
-			var cells_html = _.map(collection.models, function(item){
-				return template(item.toJSON());
-			})
-			this.$('.table-view').empty().append(cells_html);
-		},
-
-		onError: function(collection, response, options){
-			console.log('on error');
+		onLoadmore: function(){
+			this.tasks.fetchNextPage();
 		}
 
 	});
