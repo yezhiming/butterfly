@@ -16,7 +16,7 @@ define(['backbone'], function(Backbone){
     },
 
     search: function(options){
-      
+
     },
 
     //
@@ -24,7 +24,7 @@ define(['backbone'], function(Backbone){
     //
     fetchPage: function(page){
       this.fetch({
-        remove: !this.continuous,
+        remove: !this.continuous || page == 0,
         reset: page == 0,
         data: {page: page, pageSize: this.pageSize},
         success: this.onLoad,

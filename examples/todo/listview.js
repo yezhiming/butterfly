@@ -113,8 +113,7 @@ define([
       this.listenTo(collection, 'add', function(model, collection, options){
         console.log('add');
 
-        var item = new me.itemClass({data: model.toJSON()});
-        me.addItem(item);
+        me.addItem(model);
 
         me.refresh();
       });
@@ -130,9 +129,14 @@ define([
       this.listenTo(collection, 'reset', function(collection, options){
         console.log('reset');
 
+        //remove all items
+        me.removeAllItems();
+
         _.each(collection.models, function(model){
           me.addItem(model);
         });
+
+        me.refresh();
       });
     },
 
@@ -179,6 +183,23 @@ define([
 
       this.subviews.push(item);
       this.el.querySelector("ul").appendChild(item.el);
+    },
+
+    //id or instance
+    removeItem: function(item){
+
+      var indexToRemove = $.isNumberic(item) ? item : this.subviews.indexOf(item);
+
+      this.subviews.splice[indexToRemove, 1];
+    },
+
+    removeAllItems: function(){
+
+      _.each(this.subviews, function(subview){
+        subview.remove();
+      });
+
+      this.subviews.splice[0, this.subviews.length];
     }
   });
 });
