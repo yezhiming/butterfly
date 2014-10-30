@@ -13,7 +13,7 @@ define(['backbone'], function(Backbone){
 
     //覆盖此方法，在响应中解析出总页数等信息
     parse: function(response){
-        return response.records;
+      return response.records;
     },
 
     search: function(options){
@@ -63,7 +63,7 @@ define(['backbone'], function(Backbone){
     }
   });
 
-  //
+  //遗留系统，响应里没有总页数，当前页等信息，需要自行推断
   var LegacyTasks = Tasks.extend({
 
     //legacy server API
