@@ -112,6 +112,10 @@ define([
 
       var me = this;
 
+      this.listenTo(collection, 'end', function(){
+        me.$('.loadmore').hide();
+      });
+
       this.listenTo(collection, 'add', function(model, collection, options){
         console.log('add');
 
@@ -132,18 +136,23 @@ define([
         console.log('change');
       });
 
-      this.listenTo(collection, 'reset', function(collection, options){
-        console.log('reset');
+      this.listenTo(collection, 'reset', _.bind(this.onReset, this));
+    },
 
-        //remove all items
-        me.removeAllItems();
+    onReset: function(collection, options){
+      console.log('reset');
 
-        _.each(collection.models, function(model){
-          me.addItem(model);
-        });
+      this.$('.loadmore').show();
 
-        me.refresh();
+      //remove all items
+      this.removeAllItems();
+
+      var me = this;
+      _.each(collection.models, function(model){
+        me.addItem(model);
       });
+
+      this.refresh();
     },
 
     //
