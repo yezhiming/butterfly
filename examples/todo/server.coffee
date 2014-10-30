@@ -36,6 +36,9 @@ tasks = [
 findById = (id) ->
   _.find(tasks, (task) -> task.id == id)
 
+# emulate lagacy system API, return result array only
+legacy = false
+
 #page number start from 0
 #pageSize default to array length
 app.get '/api/tasks', (req, res) ->
@@ -47,7 +50,14 @@ app.get '/api/tasks', (req, res) ->
 
   console.log "page: #{page}, pageSize: #{pageSize}, start: #{start}, end: #{end}"
 
-  res.send(tasks[start...end])
+  if legacy
+    res.send(tasks[start...end])
+  else
+    res.send
+      page: parseInt(page)
+      pageCount: tasks.length / page + tasks.length % pageSize != 0 ? 1: 0
+      records: tasks[start...end]
+      recordCount: tasks.length
 
 # find a task by id
 app.get '/api/tasks/:id', (req, res) ->

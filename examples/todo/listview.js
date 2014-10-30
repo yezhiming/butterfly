@@ -20,6 +20,8 @@ define([
       "click li": "onRowSelect"
     },
 
+    mapping: {},
+
     //parse params from options or from el attributes
     initialize: function(options){
 
@@ -120,6 +122,10 @@ define([
 
       this.listenTo(collection, 'remove', function(model, collection, options){
         console.log('remove');
+
+        var viewItem = me.mapping[model.cid];
+        viewItem.remove();
+        delete me.mapping[model.cid];
       });
 
       this.listenTo(collection, 'change', function(model, collection, options){
@@ -152,6 +158,15 @@ define([
       }
     },
 
+    setEditing: function(editing){
+
+      this.subviews.forEach(function(subview){
+        subview.setEditing(editing);
+      });
+
+      this.editing = editing;
+    },
+
     //
     // ListView Evnets
     //
@@ -176,16 +191,23 @@ define([
 
     addItem: function(item){
 
-      //convert backbone model to object
-      if (item instanceof Backbone.Model) item = item.toJSON();
-      //convert object to Item
-      if ($.isPlainObject(item))  item = new this.itemClass({data: item});
+      var viewItem;
+      if (item instanceof Backbone.Model)  {
+        //convert object to Item
+        viewItem = new this.itemClass({data: item.toJSON()});
+      } else if (item instanceof Backbone.View) {
+        viewItem = item;
+      } else {
+        throw new Error('pojo not supported');
+      }
 
-      this.subviews.push(item);
-      this.el.querySelector("ul").appendChild(item.el);
+      this.mapping[item.cid] = viewItem;
+
+      this.subviews.push(viewItem);
+      this.el.querySelector("ul").appendChild(viewItem.el);
     },
 
-    //id or instance
+    //id or item instance
     removeItem: function(item){
 
       var indexToRemove = $.isNumberic(item) ? item : this.subviews.indexOf(item);

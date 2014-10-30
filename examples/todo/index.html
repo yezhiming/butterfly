@@ -23,13 +23,15 @@
 
     <script id="cell-template" type="text/x-template">
         <%= name %>
+        <a href="">delete</a>
     </script>
 
     <div id="main" data-view="$StackView">
 
       <div id="main-page" data-view="index">
         <header class="bar bar-nav">
-          <a id="refresh" class="icon icon-refresh pull-right"></a>
+          <a id="refresh" class="icon icon-refresh pull-left"></a>
+          <a id="edit" class="icon icon-edit pull-right"></a>
           <h1 class="title">Tasks</h1>
         </header>
         <div class="content">
