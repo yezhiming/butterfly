@@ -42,8 +42,8 @@ legacy = false
 #page number start from 0
 #pageSize default to array length
 app.get '/api/tasks', (req, res) ->
-  page = req.query.page || 0
-  pageSize = req.query.pageSize || tasks.length
+  page = parseInt(req.query.page) || 0
+  pageSize = parseInt(req.query.pageSize) || tasks.length
 
   start = page * pageSize
   end = page * pageSize + pageSize * 1
@@ -54,8 +54,8 @@ app.get '/api/tasks', (req, res) ->
     res.send(tasks[start...end])
   else
     res.send
-      page: parseInt(page)
-      pageCount: tasks.length / page + tasks.length % pageSize != 0 ? 1: 0
+      page: page
+      pageCount: Math.ceil(tasks.length / pageSize)
       records: tasks[start...end]
       recordCount: tasks.length
 

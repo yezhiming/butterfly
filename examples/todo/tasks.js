@@ -47,7 +47,7 @@ define(['backbone'], function(Backbone){
     onLoad: function(collection, response, options){
       console.log('on load');
 
-      if (response.records.length > 0) {
+      if (response.page < response.pageCount - 1 || response.records.length == 0) {
 
         this.page = response.page;
       } else {
@@ -74,9 +74,15 @@ define(['backbone'], function(Backbone){
     onLoad: function(collection, response, options){
       console.log('on load');
 
-      if (response.length.length > 0) {
-        this.page ++;
+      if (response.length == options.data.pageSize) {
+        //响应有数据，且与pageSize一样，足一页，页码加一（但也可能刚好够一页，下一页为数据长度为0）
+        this.page++;
+      } else if (response.length.length > 0) {
+        //有数据，但不足一页，页码加一，并触发完成事件
+        this.page++;
+        this.trigger('end', this);
       } else {
+        //直接触发完成事件
         this.trigger('end', this);
       }
     },
