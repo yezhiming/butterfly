@@ -25,7 +25,7 @@ define(['butterfly/view'], function(View){
     //pass on the 'onShow' event to the top subview
     onShow: function(options){
       var currentView = this.stack[this.stack.length -1].view;
-      currentView.show(options);
+      if(currentView.show) currentView.show(options);
     },
 
     addSubview: function(view){
@@ -64,10 +64,10 @@ define(['butterfly/view'], function(View){
 
         currentView.animateSlideOutRight(function(){
           //hide & remote top
-          currentView.hide();
+          if (currentView.hide) currentView.hide();
           currentView.remove();
           //show next
-          nextView.show(options);
+          if (nextView.show) nextView.show(options);
         });
 
       } else {
@@ -85,13 +85,13 @@ define(['butterfly/view'], function(View){
           });
 
           if (currentView) {
-            currentView.hide();
+            if (currentView.hide) currentView.hide();
             // currentView.remove();
           }
 
           newView.render();
           me.el.appendChild(newView.el);
-          newView.show(options);
+          if (nextView.show) newView.show(options);
 
           //如果是第一次route，则不显示动画
           if (me.routedOnce) {
@@ -103,7 +103,8 @@ define(['butterfly/view'], function(View){
 
           me.routedOnce = true;
         }, function(err){
-          //TODO: without trigger
+          //TODO: without trigger,
+          //可以拦截link，先load页面看是否可行，再navigate
           window.history.back();
           alert('页面加载失败');
         });

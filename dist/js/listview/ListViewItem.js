@@ -1,8 +1,9 @@
 define(['../view'], function(View){
-	
+
 	return View.extend({
 
 		tagName: "li",
+		className: "table-view-cell",
 
 		initialize: function(){
 			View.prototype.initialize.call(this, arguments);
@@ -17,7 +18,7 @@ define(['../view'], function(View){
 
 			return this;
 		},
-		
+
 		setEditing: function(editing){
 			if (editing) {
 				this.$el.addClass('editing');
