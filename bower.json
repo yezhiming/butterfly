@@ -24,7 +24,6 @@
     "requirejs-i18n": "*",
     "requirejs-domready": "*",
     "require-css": "*",
-    "requirejs-hogan-plugin": "*",
     "fastclick": "*",
     "iscroll": "*",
     "jquery": "*",
@@ -44,9 +43,6 @@
     },
     "requirejs-text": {
       "": "text.js"
-    },
-    "requirejs-hogan-plugin": {
-      "": "h*.js"
     },
     "iscroll": {
       "": "build/*"

@@ -36,9 +36,6 @@ amdConfig =
     iscroll: 'vendor/iscroll/iscroll-probe'
     moment: 'vendor/moment/moment'
     spin: 'vendor/spinjs/spin'
-    # hogan
-    hogan: 'vendor/requirejs-hogan-plugin/hogan'
-    hgn: 'vendor/requirejs-hogan-plugin/hgn'
 
   shim:
     iscroll: {exports: 'IScroll'}
