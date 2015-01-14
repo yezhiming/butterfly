@@ -7,3 +7,13 @@
   display: box;
   box-orient: vertical;
 }
+
+.generate-flexes(12);
+
+.generate-flexes(@n, @i: 1) when (@i =< @n) {
+  .flex-@{i} {
+    box-flex: (@i);
+    -ms-flex: @i 0 auto;
+  }
+  .generate-flexes(@n, (@i + 1));
+}
