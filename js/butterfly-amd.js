@@ -19,19 +19,10 @@ require.config({
 		fastclick: 'butterfly/vendor/fastclick/fastclick',
 		iscroll: 'butterfly/vendor/iscroll/iscroll-probe',
 		moment: 'butterfly/vendor/moment/moment',
-		spin: 'butterfly/vendor/spinjs/spin',
-		// hogan
-		hogan: 'butterfly/vendor/requirejs-hogan-plugin/hogan',
-		hgn: 'butterfly/vendor/requirejs-hogan-plugin/hgn'
+		spin: 'butterfly/vendor/spinjs/spin'
 	},
 	waitSeconds: 5,
 	shim: {
-		jquery: {exports: '$'},
-		underscore: {exports: '_'},
-		backbone: {
-			deps: ['underscore', 'jquery'],
-			exports: 'Backbone'
-		},
 		iscroll: {exports: 'IScroll'},
 		fastclick: {exports: 'FastClick'}
 	}
