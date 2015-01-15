@@ -14,7 +14,7 @@
   //
   // Backbone View Hierachy extension
   //
-  _.extend(this.Backbone.View.prototype, {
+  _.extend(Backbone.View.prototype, {
 
     // getter method
     getChildren: function() {
@@ -25,6 +25,7 @@
     },
 
     // find a child by id from the hierachy
+    // Breadth First Search
     findChild: function(id) {
       var result = _.find(this.getChildren(), function(child){
         return child.el.id == id;
@@ -59,12 +60,38 @@
       this.children = null;
     },
 
+    //
     dispose: function() {
 
       this.disposeChildren();
 
       this.remove();
+    },
+
+    remove: function() {
+
+      this.disposeChildren();
+
+      this.__super__.remove.apply(this, arguments);
     }
+
   });
+
+  // legacy api
+  var legacy = {
+
+    addSubview: function(view){
+      this.addChild(view);
+    },
+
+    //find a subview
+    //Breadth First Search
+    find: function(id){
+      return this.findChild(id);
+    }
+
+  }
+
+  _.extend(Backbone.View.prototype, legacy);
 
 });
