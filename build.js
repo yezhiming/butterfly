@@ -19,22 +19,15 @@
 		fastclick: 'vendor/fastclick/fastclick',
 		iscroll: 'vendor/iscroll/iscroll-probe',
 		moment: 'vendor/moment/moment',
-		spin: 'vendor/spinjs/spin',
-		// hogan
-		hogan: 'vendor/requirejs-hogan-plugin/hogan',
-		hgn: 'vendor/requirejs-hogan-plugin/hgn'
+		spin: 'vendor/spinjs/spin'
 	},
 	shim: {
-		jquery: {exports: '$'},
-		underscore: {exports: '_'},
-		backbone: {
-			deps: ['underscore', 'jquery'],
-			exports: 'Backbone'
-		},
 		iscroll: {exports: 'IScroll'},
 		fastclick: {exports: 'FastClick'}
 	},
-  name: "js/butterfly-amd.js",
+	preserveLicenseComments: false,
+  name: "butterfly",
+	include: ['butterfly/view', 'butterfly/StackView', 'butterfly/Notification'],
   out: "dist/js/butterfly-dist.js",
   optimize: "none"//uglify
 })

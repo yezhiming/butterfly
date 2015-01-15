@@ -34,7 +34,7 @@ amdConfig =
     jquery: 'vendor/jquery/dist/jquery'
     underscore: 'vendor/underscore/underscore'
     backbone: 'vendor/backbone/backbone'
-    fastclick: 'vendor/fastclick/fastclick'
+    fastclick: 'vendor/fastclick/lib/fastclick'
     iscroll: 'vendor/iscroll/build/iscroll-probe'
     moment: 'vendor/moment/moment'
     spin: 'vendor/spinjs/spin'
