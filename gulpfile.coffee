@@ -18,7 +18,9 @@ minify = require('gulp-minify-css')
 LessPluginAutoPrefix = require('less-plugin-autoprefix')
 autoprefix= new LessPluginAutoPrefix({browsers: ["last 2 versions"]})
 
+# bower = require('bower')
 bower = require('gulp-bower')
+mainBowerFiles = require('main-bower-files')
 
 amdConfig =
   paths:
@@ -29,11 +31,11 @@ amdConfig =
     css: 'vendor/require-css/css'
     view: 'js/requirejs-butterfly'
     # lib
-    jquery: 'vendor/jquery/jquery'
+    jquery: 'vendor/jquery/dist/jquery'
     underscore: 'vendor/underscore/underscore'
     backbone: 'vendor/backbone/backbone'
     fastclick: 'vendor/fastclick/fastclick'
-    iscroll: 'vendor/iscroll/iscroll-probe'
+    iscroll: 'vendor/iscroll/build/iscroll-probe'
     moment: 'vendor/moment/moment'
     spin: 'vendor/spinjs/spin'
 
@@ -52,13 +54,20 @@ gulp.task 'clean', (cb)->
     'examples/todo/butterfly'
     ], cb
 
-gulp.task 'bower', ->
+gulp.task 'bower:download', ['clean'], ->
 
-  bower('vendor/')
+  # gulp.src mainBowerFiles()
+  bower()
   # .pipe gulp.dest ''
 
+gulp.task 'bower:install', ['bower:download'], ->
+
+# TODO: overrides, iscroll config
+  gulp.src mainBowerFiles(), {base: 'bower_components'}
+  .pipe gulp.dest 'vendor/'
+
 # compile less with sourcemaps
-gulp.task 'less', ->
+gulp.task 'less', ['clean'], ->
 
   # gulp.src 'less/**/*.less'
   gulp.src 'less/butterfly.less'
@@ -72,17 +81,17 @@ gulp.task 'less', ->
   # .pipe minify()
   # .pipe gulp.dest 'dist/css/butterfly-min.css'
 
-gulp.task 'copy:src', ->
+gulp.task 'copy:src', ['clean'], ->
 
   gulp.src 'js/**/*'
   .pipe gulp.dest 'dist/js'
 
-gulp.task 'copy:vendor', ->
+gulp.task 'copy:vendor', ['clean'], ->
 
   gulp.src 'vendor/**/*'
   .pipe gulp.dest 'dist/vendor'
 
-gulp.task 'requirejs', ->
+gulp.task 'requirejs', ['bower:install'], ->
 
   gulp.src "js/**/*.js"
   .pipe amdOptimize "butterfly", amdConfig
@@ -90,17 +99,16 @@ gulp.task 'requirejs', ->
   .pipe gulp.dest "demo-dist"
 
 # build
-gulp.task 'dist', ['clean', 'less', 'copy:src', 'copy:vendor', 'requirejs']
+gulp.task 'dist', ['clean', 'less', 'bower:install', 'copy:src', 'copy:vendor', 'requirejs']
 
 # ln dist folder to examples
-gulp.task 'symlink', ['dist'], ->
+gulp.task 'link-to-examples', ['dist'], ->
 
   gulp.src 'dist'
   .pipe symlink 'examples/todo/butterfly'
   .pipe symlink 'examples/butterfly'
 
-gulp.task 'default', ['dist', 'symlink']
-
+gulp.task 'default', ['dist', 'link-to-examples']
 
 
 # https://github.com/phated/requirejs-example-gulpfile/blob/master/gulpfile.js

@@ -13,12 +13,9 @@
     "node_modules",
     "bower_components",
     "tests",
-    "examples",
-    "stylus"
+    "examples"
   ],
   "dependencies": {
-  },
-  "devDependencies": {
     "requirejs": "*",
     "requirejs-text": "*",
     "requirejs-i18n": "*",
@@ -34,18 +31,16 @@
     "spinjs": "*",
     "jquery-hammerjs": "*"
   },
-  "exportsOverride": {
-    "requirejs-domready": {
-      "": "domReady.js"
-    },
-    "requirejs-i18n": {
-      "": "i18n.js"
-    },
-    "requirejs-text": {
-      "": "text.js"
+  "devDependencies": {
+
+  },
+
+  "overrides": {
+    "jquery": {
+      "main": ["dist/jquery.js"]
     },
     "iscroll": {
-      "": "build/*"
+      "main": ["build/iscroll.js", "build/iscroll-probe.js"]
     }
   }
 }
