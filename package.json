@@ -29,6 +29,7 @@
     "gulp-symlink": "^2.1.0",
     "gulp-uglify": "^1.0.2",
     "less-plugin-autoprefix": "^1.1.0",
+    "main-bower-files": "^2.4.1",
     "requirejs": "^2.1.15",
     "underscore": "~1.7.0"
   }
