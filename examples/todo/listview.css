@@ -1,6 +1,6 @@
 .list-view {
   /*
-	* style while this li is in editing
+	* style li while listview is in editing
 	* .list-view.editing
 	*/
 }
@@ -17,6 +17,9 @@
   -webkit-transition: all 0.25s;
   -moz-transition: all 0.25s;
   transition: all 0.25s;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 .list-view li .item-content:before {
   font-family: Ratchicons;
