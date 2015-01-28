@@ -11,6 +11,7 @@
 
 })(this, function(root, _, Backbone){
 
+  var origin_remove = Backbone.View.prototype.remove;
   //
   // Backbone View Hierachy extension
   //
@@ -72,7 +73,7 @@
 
       this.disposeChildren();
 
-      this.__super__.remove.apply(this, arguments);
+      origin_remove.apply(this, arguments);
     }
 
   });
