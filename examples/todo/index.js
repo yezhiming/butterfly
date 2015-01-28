@@ -40,6 +40,12 @@ define([
 		onEdit: function(){
 			var listview = this.find('todo-list');
 			listview.setEditing(!listview.editing);
+
+			if (listview.editing) {
+				this.$('#edit').addClass('editing');
+			} else {
+				this.$('#edit').removeClass('editing');
+			}
 		},
 
 		onLoadmore: function(){

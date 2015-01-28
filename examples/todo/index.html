@@ -26,12 +26,21 @@
       <%= name %>
     </script>
 
+    <style type="text/css">
+      #edit:before {
+        content: 'Edit';
+      }
+      #edit.editing:before {
+        content: 'Cancel';
+      }
+    </style>
+
     <div id="main" data-view="$StackView">
 
       <div id="main-page" data-view="index">
         <header class="bar bar-nav">
           <a id="refresh" class="icon icon-refresh pull-left"></a>
-          <a id="edit" class="icon icon-edit pull-right"></a>
+          <a id="edit" class="icon pull-right"></a>
           <h1 class="title">Tasks</h1>
         </header>
 
@@ -61,9 +70,6 @@
             </div>
 
           </div>
-
-          <!-- useless, for demo validation -->
-          <div data-view="$view"/>
 
         </div>
       </div>
