@@ -69,8 +69,10 @@ gulp.task 'bower:install', ['bower:download'], ->
 # compile less with sourcemaps
 gulp.task 'less', ['clean'], ->
 
-  # gulp.src 'less/**/*.less'
-  gulp.src 'less/butterfly.less'
+  # compile all in split files
+  gulp.src 'less/**/*.less'
+  # compile one only
+  # gulp.src 'less/butterfly.less'
   .pipe sourcemaps.init()
   .pipe less(plugins: [autoprefix])
   # By default, gulp-sourcemaps writes the source maps inline in the compiled CSS files.
