@@ -1,0 +1,39 @@
+.scroller li {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -o-box;
+  display: -ms-box;
+  display: box;
+  -webkit-box-orient: horizontal;
+  -moz-box-orient: horizontal;
+  box-orient: horizontal;
+  /*style while this li is in editing*/
+}
+.scroller li .item-content {
+  margin-left: -20px;
+  -webkit-transition: all 0.25s;
+  -moz-transition: all 0.25s;
+  transition: all 0.25s;
+}
+.scroller li .item-content:before {
+  font-family: Ratchicons;
+  content: '\e81c';
+  display: inline-block;
+  width: 20px;
+  visibility: hidden;
+  opacity: 0;
+  -webkit-transition: all 0.25s;
+  -moz-transition: all 0.25s;
+  transition: all 0.25s;
+}
+.scroller li.editing .item-content {
+  margin-left: 0px;
+}
+.scroller li.editing .item-content:before {
+  content: '\e81c';
+  visibility: visible;
+  opacity: 1;
+}
+.scroller li.selected .item-content:before {
+  content: '\e81b';
+}

@@ -1,0 +1,49 @@
+.transition(@transition) {
+	-webkit-transition: @transition;
+	   -moz-transition: @transition;
+	        transition: @transition;
+}
+
+.scroller {
+  li {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -o-box;
+    display: -ms-box;
+    display: box;
+    -webkit-box-orient: horizontal;
+    -moz-box-orient: horizontal;
+    box-orient: horizontal;
+
+    .item-content {
+      margin-left: -20px;
+
+      .transition(all .25s);
+
+      &:before {
+        font-family: Ratchicons; content: '\e81c';
+
+        display: inline-block; width: 20px;
+
+        visibility:hidden; opacity:0;
+
+        .transition(all .25s);
+      }
+    }
+
+    /*style while this li is in editing*/
+    &.editing .item-content {
+      margin-left: 0px;
+
+      &:before {
+        content: '\e81c';
+
+        visibility:visible; opacity:1;
+      }
+    }
+
+    &.selected .item-content:before {
+      content: '\e81b';
+    }
+  }
+}

@@ -3,8 +3,9 @@ define([
   'underscore',
   'butterfly/view',
   'butterfly/listview/ListViewTemplateItem',
-  'iscroll'
-  ], function($, _, View, TplItem, IScroll){
+  'iscroll',
+  'css!listview'
+  ], function($, _, View, TplItem, IScroll, CSS){
 
   //desired options
   //itemTemplate supports:
@@ -128,8 +129,12 @@ define([
         console.log('remove');
 
         var viewItem = me.mapping[model.cid];
-        viewItem.remove();
-        delete me.mapping[model.cid];
+        //TODO: animate
+        viewItem.animate('1s fadeOut', function(){
+          viewItem.remove();
+          delete me.mapping[model.cid];
+        });
+
       });
 
       this.listenTo(collection, 'change', function(model, collection, options){
@@ -217,6 +222,7 @@ define([
     },
 
     //id or item instance
+    //TODO: not work yet
     removeItem: function(item){
 
       var indexToRemove = $.isNumberic(item) ? item : this.subviews.indexOf(item);
