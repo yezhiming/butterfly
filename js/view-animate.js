@@ -37,7 +37,7 @@
   animationExtentions =
   animations.reduce(function(previousValue, animation){
     fn_name = 'animate' + animation.charAt(0).toUpperCase() + animation.substring(1);
-    previousValue['animate' + fn_name] = function(onFinish){
+    previousValue[fn_name] = function(onFinish){
       this.animate(animation, onFinish);
     }
     return previousValue;
