@@ -9,7 +9,8 @@ define([
 
 		events: {
 			"click #refresh": "onRefresh",
-			"click #edit": "onEdit"
+			"click #edit": "onEdit",
+			"click #add": "onAdd"
 		},
 
 		initialize: function(){
@@ -46,6 +47,12 @@ define([
 			} else {
 				this.$('#edit').removeClass('editing');
 			}
+		},
+
+		onAdd: function(){
+			this.tasks.create({
+				name: "task created at: " + new Date()
+			});
 		},
 
 		onLoadmore: function(){

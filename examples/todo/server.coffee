@@ -1,9 +1,12 @@
 path = require 'path'
 express = require 'express'
+bodyParser = require 'body-parser'
+
 _ = require 'underscore'
 app = express()
 
 app.use(express.static(path.resolve('.')))
+app.use(bodyParser.json())
 
 app.get '/', (req, res)->
   res.redirect '/index.html'
@@ -67,13 +70,10 @@ app.get '/api/tasks/:id', (req, res) ->
 
 # create a new task
 app.post '/api/tasks', (req, res) ->
-  if req.params.id and findById(req.params.id)
-    res.status(400).send('id already exists')
-  else
-    newTask = _.pick(req.params, ['id', 'name', 'done'])
-    console.log newTask
-    tasks.push newTask
-    res.status(200).end()
+  newTask = _.pick(req.body, ['name', 'done'])
+  console.log newTask
+  tasks.push newTask
+  res.status(200).end()
 
 # delete a task by id
 app.delete '/api/tasks/:id', (req, res) ->
