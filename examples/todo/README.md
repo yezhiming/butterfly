@@ -6,3 +6,6 @@ reference:
 
 how to run:
 coffee server.coffee
+
+compile less:
+lessc listview.less > listview.css

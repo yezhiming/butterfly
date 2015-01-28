@@ -2,7 +2,7 @@ define([
   'jquery',
   'underscore',
   'butterfly/view',
-  'butterfly/listview/ListViewTemplateItem',
+  './ListViewTemplateItem',
   'iscroll',
   'css!listview'
   ], function($, _, View, TplItem, IScroll, CSS){
@@ -16,6 +16,7 @@ define([
   var listviewOptions = ['collection', 'itemTemplate', 'itemClass', 'pageSize', 'iscroll'];
 
   return View.extend({
+
     events: {
       "click .loadmore": "onLoadMore",
       "click li": "onRowSelect"
@@ -25,6 +26,9 @@ define([
 
     //parse params from options or from el attributes
     initialize: function(options){
+
+      // IMPORTANT: all styles attached under this class
+      this.$el.addClass('list-view');
 
       View.prototype.initialize.apply(this, arguments);
 
@@ -174,11 +178,17 @@ define([
 
     setEditing: function(editing){
 
-      this.subviews.forEach(function(subview){
-        subview.setEditing(editing);
-      });
+      // this.subviews.forEach(function(subview){
+      //   subview.setEditing(editing);
+      // });
 
       this.editing = editing;
+
+      if (editing) {
+        this.$el.addClass('editing');
+      } else {
+        this.$el.removeClass('editing');
+      }
     },
 
     //

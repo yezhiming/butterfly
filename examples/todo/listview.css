@@ -1,21 +1,24 @@
-.scroller li {
+.list-view {
+  /*
+	* style while this li is in editing
+	* .list-view.editing
+	*/
+}
+.list-view li {
   display: -webkit-box;
   display: -moz-box;
-  display: -o-box;
-  display: -ms-box;
   display: box;
   -webkit-box-orient: horizontal;
   -moz-box-orient: horizontal;
   box-orient: horizontal;
-  /*style while this li is in editing*/
 }
-.scroller li .item-content {
+.list-view li .item-content {
   margin-left: -20px;
   -webkit-transition: all 0.25s;
   -moz-transition: all 0.25s;
   transition: all 0.25s;
 }
-.scroller li .item-content:before {
+.list-view li .item-content:before {
   font-family: Ratchicons;
   content: '\e81c';
   display: inline-block;
@@ -26,14 +29,13 @@
   -moz-transition: all 0.25s;
   transition: all 0.25s;
 }
-.scroller li.editing .item-content {
+.list-view li.selected .item-content:before {
+  content: '\e81b';
+}
+.list-view.editing li .item-content {
   margin-left: 0px;
 }
-.scroller li.editing .item-content:before {
-  content: '\e81c';
+.list-view.editing li .item-content:before {
   visibility: visible;
   opacity: 1;
-}
-.scroller li.selected .item-content:before {
-  content: '\e81b';
 }

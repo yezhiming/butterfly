@@ -4,12 +4,11 @@
 	        transition: @transition;
 }
 
-.scroller {
+.list-view {
+
   li {
     display: -webkit-box;
     display: -moz-box;
-    display: -o-box;
-    display: -ms-box;
     display: box;
     -webkit-box-orient: horizontal;
     -moz-box-orient: horizontal;
@@ -25,20 +24,9 @@
 
         display: inline-block; width: 20px;
 
-        visibility:hidden; opacity:0;
+        visibility: hidden; opacity: 0;
 
         .transition(all .25s);
-      }
-    }
-
-    /*style while this li is in editing*/
-    &.editing .item-content {
-      margin-left: 0px;
-
-      &:before {
-        content: '\e81c';
-
-        visibility:visible; opacity:1;
       }
     }
 
@@ -46,4 +34,16 @@
       content: '\e81b';
     }
   }
+
+	/*
+	* style while this li is in editing
+	* .list-view.editing
+	*/
+	&.editing li .item-content {
+		margin-left: 0px;
+
+		&:before {
+			visibility: visible; opacity: 1;
+		}
+	}
 }
