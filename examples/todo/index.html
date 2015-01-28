@@ -13,17 +13,17 @@
 
   <!-- 3rd part UI ratchet -->
   <link href="ratchet/css/ratchet.css" rel="stylesheet"/>
-  <!-- <link href="../ratchet/css/ratchet-theme-ios.min.css" rel="stylesheet"/> -->
-  <!-- butterfly.js UI -->
+
+  <!-- butterfly.js styles -->
   <link href="butterfly/css/butterfly.css" rel="stylesheet"/>
 
-  <script type="text/javascript" src="butterfly/js/require.js" data-main="butterfly/js/butterfly-amd"></script>
+  <script type="text/javascript" src="butterfly/vendor/requirejs/require.js" data-main="main"></script>
 </head>
 <body>
 
+    <!-- List Item 模板 -->
     <script id="cell-template" type="text/x-template">
-        <%= name %>
-        <a href="">delete</a>
+      <%= name %>
     </script>
 
     <div id="main" data-view="$StackView">
@@ -34,6 +34,12 @@
           <a id="edit" class="icon icon-edit pull-right"></a>
           <h1 class="title">Tasks</h1>
         </header>
+
+        <div class="bar bar-standard bar-footer">
+          <a class="icon icon-compose pull-left"></a>
+          <a class="icon icon-gear pull-right"></a>
+        </div>
+
         <div class="content">
 
           <!-- Bind to ListView Component-->
@@ -48,7 +54,7 @@
               <ul class="table-view">
 
               </ul>
-              <button class="loadmore visible btn btn-block btn-outlined">
+              <button class="loadmore btn btn-block">
                 <div class="label">加载更多</div>
                 <span class="icon"></span>
               </button>

@@ -13,25 +13,16 @@ require.config({
     css: 'butterfly/vendor/require-css/css',
     view: 'butterfly/js/requirejs-butterfly',
     // lib
-    jquery: 'butterfly/vendor/jquery/jquery',
+    jquery: 'butterfly/vendor/jquery/dist/jquery',
     underscore: 'butterfly/vendor/underscore/underscore',
     backbone: 'butterfly/vendor/backbone/backbone',
-    fastclick: 'butterfly/vendor/fastclick/fastclick',
-    iscroll: 'butterfly/vendor/iscroll/iscroll-probe',
+    fastclick: 'butterfly/vendor/fastclick/lib/fastclick',
+    iscroll: 'butterfly/vendor/iscroll/build/iscroll-probe',
     moment: 'butterfly/vendor/moment/moment',
-    spin: 'butterfly/vendor/spinjs/spin',
-    // hogan
-    hogan: 'butterfly/vendor/requirejs-hogan-plugin/hogan',
-    hgn: 'butterfly/vendor/requirejs-hogan-plugin/hgn'
+    spin: 'butterfly/vendor/spinjs/spin'
   },
   waitSeconds: 5,
   shim: {
-    jquery: {exports: '$'},
-    underscore: {exports: '_'},
-    backbone: {
-      deps: ['underscore', 'jquery'],
-      exports: 'Backbone'
-    },
     iscroll: {exports: 'IScroll'},
     fastclick: {exports: 'FastClick'}
   }
@@ -39,13 +30,19 @@ require.config({
 
 require([
   'domReady!',
+  'backbone',
   'butterfly',
   'butterfly/fastclick',
-  'butterfly/view-extensions',
+  'butterfly/view-hierachy',
   'butterfly/view-animate',
   'butterfly/view-modal'
   ],
-function(domReady, Butterfly, FastClick){
+function(domReady, Backbone, Butterfly, FastClick, HierachyPlugin, AnimatePlugin, ModalPlugin){
+
+  Backbone.View
+  .use(HierachyPlugin)
+  .use(AnimatePlugin)
+  .use(ModalPlugin)
 
   //ios7 issue fix
   if (navigator.userAgent.match(/iPad;.*CPU.*OS 7_\d/i)) {
