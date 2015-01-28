@@ -36,8 +36,14 @@
   },
 
   "overrides": {
+    "requirejs-domready": {
+      "main": ["domReady.js"]
+    },
     "jquery": {
       "main": ["dist/jquery.js"]
+    },
+    "fastclick": {
+      "main": ["lib/fastclick.js"]
     },
     "iscroll": {
       "main": ["build/iscroll.js", "build/iscroll-probe.js"]
