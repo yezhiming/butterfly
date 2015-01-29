@@ -143,6 +143,7 @@ define([
 
       this.listenTo(collection, 'change', function(model, collection, options){
         console.log('change');
+        //TODO: update item
       });
 
       this.listenTo(collection, 'reset', _.bind(this.onReset, this));
@@ -188,6 +189,11 @@ define([
         this.$el.addClass('editing');
       } else {
         this.$el.removeClass('editing');
+
+        // deselect all item
+        this.subviews.forEach(function(child){
+          child.setSelected(false);
+        });
       }
     },
 
